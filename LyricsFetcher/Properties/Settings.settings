@@ -1,0 +1,46 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LyricsFetcher.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="LyricsFetcher_org_lyricwiki_LyricWiki" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://lyricwiki.org/server.php</Value>
+    </Setting>
+    <Setting Name="IgnoredGenres" Description="The list of genres for which song lyrics will never be fetched" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Books &amp;amp; Spoken&lt;/string&gt;
+  &lt;string&gt;Classical&lt;/string&gt;
+  &lt;string&gt;Instrumental&lt;/string&gt;
+  &lt;string&gt;Podcast&lt;/string&gt;
+  &lt;string&gt;Sermon&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="SearchQuery" Description="The URL that is invoked when the Search button is pressed. {0} is the title, {1} is the artist." Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://www.google.com/search?q='{0}'+'{1}'+%2Blyrics</Value>
+    </Setting>
+    <Setting Name="IgnoredKinds" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;MPEG-4 video file&lt;/string&gt;
+  &lt;string&gt;Protected MPEG-4 video file&lt;/string&gt;
+  &lt;string&gt;Protected QuickTime movie file&lt;/string&gt;
+  &lt;string&gt;QuickTime movie file&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="UseFastITunesLoader" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="LyricsFlyApiUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://lyricsfly.com/api/api.php?i={0}&amp;a={1}&amp;t={2}</Value>
+    </Setting>
+    <Setting Name="LyricsFlyUserId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">14ce15080316b07e9-temporary.API.access</Value>
+    </Setting>
+    <Setting Name="LyrDbLookupUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://webservices.lyrdb.com/lookup.php?q={0}|{1}&amp;for=match</Value>
+    </Setting>
+    <Setting Name="LyrDbGetUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://webservices.lyrdb.com/getlyr.php?q=</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
