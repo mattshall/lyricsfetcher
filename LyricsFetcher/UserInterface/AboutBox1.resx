@@ -118,10 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="richTextBox1.Text" xml:space="preserve">
-    <value>Lyrics Fetcher takes the task of finding lyrics for all the songs in your library. It works with iTunes and Windows Media Player.
+    <value>LyricsFetcher is the easiest way to find lyrics for all your songs.
 
 User guide and complete source code are available at http://lyricsfetcher.sourceforget.net.
 
-Graphics are part of the boomy icon set, created by Milosz Wlazlo (http://miloszwl.deviantart.com).</value>
+Graphics are part of the boomy icon set, created by Milosz Wlazlo (http://miloszwl.deviantart.com).
+
+Copyright c. 2009 Phillip Piper. This program is released under GNU Public License.</value>
   </data>
 </root>

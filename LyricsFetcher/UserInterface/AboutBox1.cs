@@ -1,10 +1,11 @@
 /*
- * This file holds the class implementations necessary to interact with Window Media LibraryApplication.
+ * This form shows the About box for the application.
  *
  * Author: Phillip Piper
  * Date: 2009-02-09 14:28
  *
  * CHANGE LOG:
+ * 2009-03-06 JPP  Changed layout
  * 2009-02-09 JPP  Initial Version
  */
 
@@ -21,14 +22,32 @@ namespace LyricsFetcher
     {
         public AboutBox1() {
             this.InitializeComponent();
-            this.Text = String.Format("About {0}", this.AssemblyTitle);
+            this.Text = String.Format("About {0}", this.AssemblyProduct);
             this.labelVersion.Text = String.Format("Version {0}", this.AssemblyVersion);
-            this.labelCopyright.Text = this.AssemblyCopyright;
-            this.labelCompanyName.Text = this.AssemblyCompany;
         }
 
         #region Assembly Attribute Accessors
 
+        public string AssemblyProduct {
+            get {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                if (attributes.Length == 0) {
+                    return "";
+                }
+                return ((AssemblyProductAttribute)attributes[0]).Product;
+            }
+        }
+
+        public string AssemblyVersion {
+            get {
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+        }
+
+        /*
+         * I don't use any of these, but it's still interesting to see how it is done.
+         * 
+         
         public string AssemblyTitle {
             get {
                 object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
@@ -42,12 +61,6 @@ namespace LyricsFetcher
             }
         }
 
-        public string AssemblyVersion {
-            get {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-        }
-
         public string AssemblyDescription {
             get {
                 object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
@@ -55,16 +68,6 @@ namespace LyricsFetcher
                     return "";
                 }
                 return ((AssemblyDescriptionAttribute)attributes[0]).Description;
-            }
-        }
-
-        public string AssemblyProduct {
-            get {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                if (attributes.Length == 0) {
-                    return "";
-                }
-                return ((AssemblyProductAttribute)attributes[0]).Product;
             }
         }
 
@@ -87,6 +90,8 @@ namespace LyricsFetcher
                 return ((AssemblyCompanyAttribute)attributes[0]).Company;
             }
         }
+         * 
+         */
 
         #endregion
 
