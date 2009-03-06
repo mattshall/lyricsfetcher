@@ -5,7 +5,8 @@
  * Date: 2009-02-07 11:15 AM
  *
  * Change log:
- * 2009-02-071  JPP  Initial version
+ * 2009-02-28  JPP  Use lock() to prevent race conditions
+ * 2009-02-07  JPP  Initial version
  */
 
 using System;
@@ -20,14 +21,6 @@ namespace LyricsFetcher
     /// </summary>
     public class LyricsFetchManager
     {
-        #region Constructors
-
-        public LyricsFetchManager()
-        {
-        }
-
-        #endregion
-
         #region Public Attributes
 
         /// <summary>
@@ -43,8 +36,7 @@ namespace LyricsFetcher
         /// <summary>
         /// How many songs are currently fetching their lyrics?
         /// </summary>
-        public int CountFetching
-        {
+        public int CountFetching {
             get {
                 return this.fetchingSongs.Count;
             }
@@ -53,8 +45,7 @@ namespace LyricsFetcher
         /// <summary>
         /// How many songs are waiting to start fetching their lyrics?
         /// </summary>
-        public int CountWaiting
-        {
+        public int CountWaiting {
             get {
                 return this.waitingSongs.Count;
             }
@@ -63,13 +54,24 @@ namespace LyricsFetcher
         /// <summary>
         /// Return true if any lyrics are currently being fetched or are waiting to be fetched.
         /// </summary>
-        public bool IsFetching
-        {
-            get { return this.CountWaiting > 0 || this.CountFetching > 0;  }
+        public bool IsFetching {
+            get { 
+                return this.CountWaiting > 0 || this.CountFetching > 0;  
+            }
         }
 
         /// <summary>
-        ///
+        /// How many simultaneous threads will be used for fetching lyrics?
+        /// </summary>
+        public int MaxFetchingThreads {
+            get { return this.maxFetching; }
+            set { this.maxFetching = Math.Max(1, value); }
+        }
+        private int maxFetching = 5;
+
+        /// <summary>
+        /// Pause the fetching of lyrics. This does not stop existing threads --
+        /// it simply prevents new threads from being launched
         /// </summary>
         public bool Paused {
             get { return this.paused; }
@@ -85,8 +87,7 @@ namespace LyricsFetcher
         /// Where will fetcher used by this manager look to find their lyrics?
         /// </summary>
         /// <remarks>Use RegisterSource() to add a new source to the manager</remarks>
-        public IList<ILyricsSource> Sources
-        {
+        public IList<ILyricsSource> Sources {
             get { return sources; }
         }
         private List<ILyricsSource> sources = new List<ILyricsSource>();
@@ -192,10 +193,6 @@ namespace LyricsFetcher
             args.Status = FetchStatus.Waiting;
             this.OnStatusEvent(args);
         }
-        private int maxFetching = 5;
-        private List<Song> waitingSongs = new List<Song>();
-        private List<Song> fetchingSongs = new List<Song>();
-        private Dictionary<Song, FetchRequestData> songStatusMap = new Dictionary<Song, FetchRequestData>();
 
         /// <summary>
         /// After new songs have been added, or old fetches have completed,
@@ -346,17 +343,21 @@ namespace LyricsFetcher
         }
 
         #endregion
-    }
 
-    /// <summary>
-    /// Instances of this class track the progress of request to fetch lyrics
-    /// </summary>
-    internal class FetchRequestData
-    {
-        public FetchStatus Status = FetchStatus.Waiting;
-        public ILyricsSource Source;
+        private List<Song> waitingSongs = new List<Song>();
+        private List<Song> fetchingSongs = new List<Song>();
+        private Dictionary<Song, FetchRequestData> songStatusMap = new Dictionary<Song, FetchRequestData>();
 
-        // THINK: Do we want to track the thread as well?
-        //public Thread Thread;
+        /// <summary>
+        /// Instances of this class track the progress of request to fetch lyrics
+        /// </summary>
+        private class FetchRequestData
+        {
+            public FetchStatus Status = FetchStatus.Waiting;
+            public ILyricsSource Source;
+
+            // THINK: Do we want to track the thread as well?
+            //public Thread Thread;
+        }
     }
 }

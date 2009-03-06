@@ -14,11 +14,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.InteropServices;
-using System.Xml;
-using System.Xml.XPath;
 using System.IO;
-
+using System.Runtime.InteropServices;
+using System.Xml.XPath;
 using iTunesLib;
 
 namespace LyricsFetcher
@@ -90,6 +88,9 @@ namespace LyricsFetcher
         #endregion
     }
 
+    /// <summary>
+    /// This class implements a Song object based on iTunes track
+    /// </summary>
     public class ITunesSong : Song
     {
         /// <summary>
@@ -199,11 +200,14 @@ namespace LyricsFetcher
         private int databaseId = -1;
     }
 
-
+    /// <summary>
+    /// This class implements a loader that loads tracks from the iTunes library using
+    /// the iTunes COM interface.
+    /// </summary>
     public class ITunesSongLoader : SongLoader
     {
         /// <summary>
-        /// Do the actual work of fetching the lyrics from the library
+        /// Do the actual work of loading the lyrics from the library
         /// </summary>
         /// <param name="e"></param>
         /// <returns>Ignored</returns>
@@ -237,10 +241,14 @@ namespace LyricsFetcher
         }
     }
 
+    /// <summary>
+    /// This class implements a loader that loads tracks from the iTunes library 
+    /// by reading the iTunes XML liibrary file.
+    /// </summary>
     public class FastITunesSongLoader : SongLoader
     {
         /// <summary>
-        /// Do the actual work of fetching the lyrics from the library
+        /// Do the actual work of loading the lyrics from the library
         /// </summary>
         /// <param name="e"></param>
         /// <returns>Ignored</returns>

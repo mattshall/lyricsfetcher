@@ -224,7 +224,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.BackColor = System.Drawing.Color.Silver;
+            this.splitContainer1.Panel2.BackColor = System.Drawing.Color.DarkGray;
             this.splitContainer1.Panel2.Controls.Add(this.buttonSearch);
             this.splitContainer1.Panel2.Controls.Add(this.buttonPlay);
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel1);
@@ -237,6 +237,7 @@
             // buttonStop
             // 
             this.buttonStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonStop.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonStop.ImageKey = "x";
             this.buttonStop.ImageList = this.imageList24;
@@ -259,8 +260,8 @@
             this.imageList24.Images.SetKeyName(1, "x");
             this.imageList24.Images.SetKeyName(2, "search");
             this.imageList24.Images.SetKeyName(3, "group");
-            this.imageList24.Images.SetKeyName(4, "music");
-            this.imageList24.Images.SetKeyName(5, "play");
+            this.imageList24.Images.SetKeyName(4, "play");
+            this.imageList24.Images.SetKeyName(5, "play2");
             this.imageList24.Images.SetKeyName(6, "stop");
             // 
             // labelFetchStatus
@@ -388,7 +389,7 @@
             this.olvColumnLyricsStatus});
             this.olvSongs.EmptyListMsg = "The library is empty";
             this.olvSongs.EmptyListMsgFont = new System.Drawing.Font("Lucida Sans", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.olvSongs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.olvSongs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.olvSongs.FullRowSelect = true;
             this.olvSongs.GroupWithItemCountFormat = "{0} ({1} songs)";
             this.olvSongs.GroupWithItemCountSingularFormat = "{0} (only {1} song)";
@@ -401,7 +402,7 @@
             this.olvSongs.ShowItemCountOnGroups = true;
             this.olvSongs.ShowItemToolTips = true;
             this.olvSongs.Size = new System.Drawing.Size(651, 362);
-            this.olvSongs.SmallImageList = this.imageList22;
+            this.olvSongs.SmallImageList = this.imageList16;
             this.olvSongs.TabIndex = 0;
             this.olvSongs.UseAlternatingBackColors = true;
             this.olvSongs.UseCompatibleStateImageBehavior = false;
@@ -511,10 +512,10 @@
             this.textBoxArtist.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxArtist.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxArtist.Location = new System.Drawing.Point(58, 31);
+            this.textBoxArtist.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxArtist.Location = new System.Drawing.Point(48, 29);
             this.textBoxArtist.Name = "textBoxArtist";
-            this.textBoxArtist.Size = new System.Drawing.Size(261, 22);
+            this.textBoxArtist.Size = new System.Drawing.Size(271, 20);
             this.textBoxArtist.TabIndex = 3;
             this.textBoxArtist.Tag = "Artist";
             this.textBoxArtist.Validated += new System.EventHandler(this.textBox_Validated);
@@ -525,11 +526,11 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(337, 0);
             this.label2.Margin = new System.Windows.Forms.Padding(15, 0, 3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 28);
+            this.label2.Size = new System.Drawing.Size(37, 26);
             this.label2.TabIndex = 8;
             this.label2.Text = "&Lyrics:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -540,10 +541,10 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 28);
+            this.label1.Size = new System.Drawing.Size(39, 26);
             this.label1.TabIndex = 0;
             this.label1.Text = "&Title:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -554,10 +555,10 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(3, 28);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(3, 26);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 28);
+            this.label3.Size = new System.Drawing.Size(39, 26);
             this.label3.TabIndex = 2;
             this.label3.Text = "A&rtist:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -568,10 +569,10 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(3, 56);
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(3, 52);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(49, 28);
+            this.label4.Size = new System.Drawing.Size(39, 26);
             this.label4.TabIndex = 4;
             this.label4.Text = "Al&bum:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -582,11 +583,11 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(3, 90);
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(3, 84);
             this.label5.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 22);
+            this.label5.Size = new System.Drawing.Size(39, 20);
             this.label5.TabIndex = 6;
             this.label5.Text = "&Genre:";
             // 
@@ -595,10 +596,10 @@
             this.textBoxTitle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTitle.Location = new System.Drawing.Point(58, 3);
+            this.textBoxTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTitle.Location = new System.Drawing.Point(48, 3);
             this.textBoxTitle.Name = "textBoxTitle";
-            this.textBoxTitle.Size = new System.Drawing.Size(261, 22);
+            this.textBoxTitle.Size = new System.Drawing.Size(271, 20);
             this.textBoxTitle.TabIndex = 1;
             this.textBoxTitle.Tag = "Title";
             this.textBoxTitle.Validated += new System.EventHandler(this.textBox_Validated);
@@ -609,14 +610,14 @@
             this.textBoxLyrics.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxLyrics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxLyrics.Location = new System.Drawing.Point(389, 3);
+            this.textBoxLyrics.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxLyrics.Location = new System.Drawing.Point(380, 3);
             this.textBoxLyrics.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.textBoxLyrics.Multiline = true;
             this.textBoxLyrics.Name = "textBoxLyrics";
             this.tableLayoutPanel1.SetRowSpan(this.textBoxLyrics, 5);
             this.textBoxLyrics.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLyrics.Size = new System.Drawing.Size(265, 130);
+            this.textBoxLyrics.Size = new System.Drawing.Size(274, 130);
             this.textBoxLyrics.TabIndex = 9;
             this.textBoxLyrics.Tag = "Lyrics";
             this.textBoxLyrics.Validated += new System.EventHandler(this.textBox_Validated);
@@ -626,10 +627,10 @@
             this.textBoxAlbum.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxAlbum.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxAlbum.Location = new System.Drawing.Point(58, 59);
+            this.textBoxAlbum.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxAlbum.Location = new System.Drawing.Point(48, 55);
             this.textBoxAlbum.Name = "textBoxAlbum";
-            this.textBoxAlbum.Size = new System.Drawing.Size(261, 22);
+            this.textBoxAlbum.Size = new System.Drawing.Size(271, 20);
             this.textBoxAlbum.TabIndex = 5;
             this.textBoxAlbum.Tag = "Album";
             this.textBoxAlbum.Validated += new System.EventHandler(this.textBox_Validated);
@@ -639,10 +640,10 @@
             this.textBoxGenre.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxGenre.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxGenre.Location = new System.Drawing.Point(58, 87);
+            this.textBoxGenre.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxGenre.Location = new System.Drawing.Point(48, 81);
             this.textBoxGenre.Name = "textBoxGenre";
-            this.textBoxGenre.Size = new System.Drawing.Size(261, 22);
+            this.textBoxGenre.Size = new System.Drawing.Size(271, 20);
             this.textBoxGenre.TabIndex = 7;
             this.textBoxGenre.Tag = "Genre";
             this.textBoxGenre.Validated += new System.EventHandler(this.textBox_Validated);
@@ -656,11 +657,15 @@
             // 
             // Form1
             // 
+            this.AcceptButton = this.buttonFetch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightGray;
+            this.CancelButton = this.buttonStop;
             this.ClientSize = new System.Drawing.Size(780, 562);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Lyrics Fetcher";

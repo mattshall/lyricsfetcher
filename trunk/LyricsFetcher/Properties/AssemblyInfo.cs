@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BrightIdeas Software Pty Ltd")]
 [assembly: AssemblyProduct("LyricsFetcher")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
+[assembly: AssemblyCopyright("Copyright ©  2009 Phillip Piper")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
