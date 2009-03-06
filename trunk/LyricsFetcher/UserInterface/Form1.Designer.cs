@@ -35,7 +35,7 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.chooseLibraryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemChooseLibrary = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemReloadLibrary = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemDiscardCache = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -53,12 +53,7 @@
             this.buttonSelectUntried = new System.Windows.Forms.Button();
             this.buttonFetch = new System.Windows.Forms.Button();
             this.imageList32 = new System.Windows.Forms.ImageList(this.components);
-            this.olvSongs = new BrightIdeasSoftware.FastObjectListView();
-            this.olvColumnTitle = new BrightIdeasSoftware.OLVColumn();
-            this.olvColumnArtist = new BrightIdeasSoftware.OLVColumn();
-            this.olvColumnAlbum = new BrightIdeasSoftware.OLVColumn();
-            this.olvColumnGenre = new BrightIdeasSoftware.OLVColumn();
-            this.olvColumnLyricsStatus = new BrightIdeasSoftware.OLVColumn();
+            this.imageList16 = new System.Windows.Forms.ImageList(this.components);
             this.buttonSearch = new System.Windows.Forms.Button();
             this.buttonPlay = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -72,16 +67,21 @@
             this.textBoxLyrics = new System.Windows.Forms.TextBox();
             this.textBoxAlbum = new System.Windows.Forms.TextBox();
             this.textBoxGenre = new System.Windows.Forms.TextBox();
-            this.imageList16 = new System.Windows.Forms.ImageList(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.olvSongs = new BrightIdeasSoftware.FastObjectListView();
+            this.olvColumnTitle = new BrightIdeasSoftware.OLVColumn();
+            this.olvColumnArtist = new BrightIdeasSoftware.OLVColumn();
+            this.olvColumnAlbum = new BrightIdeasSoftware.OLVColumn();
+            this.olvColumnGenre = new BrightIdeasSoftware.OLVColumn();
+            this.olvColumnLyricsStatus = new BrightIdeasSoftware.OLVColumn();
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.olvSongs)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olvSongs)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -141,7 +141,7 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.chooseLibraryToolStripMenuItem,
+            this.toolStripMenuItemChooseLibrary,
             this.toolStripMenuItemReloadLibrary,
             this.toolStripMenuItemDiscardCache,
             this.toolStripSeparator1,
@@ -150,12 +150,12 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // chooseLibraryToolStripMenuItem
+            // toolStripMenuItemChooseLibrary
             // 
-            this.chooseLibraryToolStripMenuItem.Name = "chooseLibraryToolStripMenuItem";
-            this.chooseLibraryToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.chooseLibraryToolStripMenuItem.Text = "Choose Library...";
-            this.chooseLibraryToolStripMenuItem.Click += new System.EventHandler(this.chooseLibraryToolStripMenuItem_Click);
+            this.toolStripMenuItemChooseLibrary.Name = "toolStripMenuItemChooseLibrary";
+            this.toolStripMenuItemChooseLibrary.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemChooseLibrary.Text = "Choose Library...";
+            this.toolStripMenuItemChooseLibrary.Click += new System.EventHandler(this.chooseLibraryToolStripMenuItem_Click);
             // 
             // toolStripMenuItemReloadLibrary
             // 
@@ -370,77 +370,12 @@
             this.imageList32.Images.SetKeyName(1, "fetch");
             this.imageList32.Images.SetKeyName(2, "stop");
             // 
-            // olvSongs
+            // imageList16
             // 
-            this.olvSongs.AllColumns.Add(this.olvColumnTitle);
-            this.olvSongs.AllColumns.Add(this.olvColumnArtist);
-            this.olvSongs.AllColumns.Add(this.olvColumnAlbum);
-            this.olvSongs.AllColumns.Add(this.olvColumnGenre);
-            this.olvSongs.AllColumns.Add(this.olvColumnLyricsStatus);
-            this.olvSongs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.olvSongs.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.F2Only;
-            this.olvSongs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumnTitle,
-            this.olvColumnArtist,
-            this.olvColumnAlbum,
-            this.olvColumnGenre,
-            this.olvColumnLyricsStatus});
-            this.olvSongs.EmptyListMsg = "The library is empty";
-            this.olvSongs.EmptyListMsgFont = new System.Drawing.Font("Lucida Sans", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.olvSongs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.olvSongs.FullRowSelect = true;
-            this.olvSongs.GroupWithItemCountFormat = "{0} ({1} songs)";
-            this.olvSongs.GroupWithItemCountSingularFormat = "{0} (only {1} song)";
-            this.olvSongs.HideSelection = false;
-            this.olvSongs.ItemRenderer = null;
-            this.olvSongs.Location = new System.Drawing.Point(3, 3);
-            this.olvSongs.Name = "olvSongs";
-            this.olvSongs.ShowGroups = false;
-            this.olvSongs.ShowImagesOnSubItems = true;
-            this.olvSongs.ShowItemCountOnGroups = true;
-            this.olvSongs.ShowItemToolTips = true;
-            this.olvSongs.Size = new System.Drawing.Size(651, 362);
-            this.olvSongs.SmallImageList = this.imageList16;
-            this.olvSongs.TabIndex = 0;
-            this.olvSongs.UseAlternatingBackColors = true;
-            this.olvSongs.UseCompatibleStateImageBehavior = false;
-            this.olvSongs.View = System.Windows.Forms.View.Details;
-            this.olvSongs.VirtualMode = true;
-            this.olvSongs.SelectionChanged += new System.EventHandler(this.olvSongs_SelectionChanged);
-            // 
-            // olvColumnTitle
-            // 
-            this.olvColumnTitle.AspectName = "Title";
-            this.olvColumnTitle.Text = "Title";
-            this.olvColumnTitle.UseInitialLetterForGroup = true;
-            this.olvColumnTitle.Width = 143;
-            // 
-            // olvColumnArtist
-            // 
-            this.olvColumnArtist.AspectName = "Artist";
-            this.olvColumnArtist.Text = "Artist";
-            this.olvColumnArtist.Width = 132;
-            // 
-            // olvColumnAlbum
-            // 
-            this.olvColumnAlbum.AspectName = "Album";
-            this.olvColumnAlbum.Text = "Album";
-            this.olvColumnAlbum.Width = 128;
-            // 
-            // olvColumnGenre
-            // 
-            this.olvColumnGenre.AspectName = "Genre";
-            this.olvColumnGenre.Text = "Genre";
-            this.olvColumnGenre.Width = 110;
-            // 
-            // olvColumnLyricsStatus
-            // 
-            this.olvColumnLyricsStatus.AspectName = "LyricsStatusString";
-            this.olvColumnLyricsStatus.FillsFreeSpace = true;
-            this.olvColumnLyricsStatus.IsEditable = false;
-            this.olvColumnLyricsStatus.Text = "Lyrics Status";
+            this.imageList16.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList16.ImageStream")));
+            this.imageList16.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList16.Images.SetKeyName(0, "music");
+            this.imageList16.Images.SetKeyName(1, "group");
             // 
             // buttonSearch
             // 
@@ -648,12 +583,77 @@
             this.textBoxGenre.Tag = "Genre";
             this.textBoxGenre.Validated += new System.EventHandler(this.textBox_Validated);
             // 
-            // imageList16
+            // olvSongs
             // 
-            this.imageList16.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList16.ImageStream")));
-            this.imageList16.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList16.Images.SetKeyName(0, "music");
-            this.imageList16.Images.SetKeyName(1, "group");
+            this.olvSongs.AllColumns.Add(this.olvColumnTitle);
+            this.olvSongs.AllColumns.Add(this.olvColumnArtist);
+            this.olvSongs.AllColumns.Add(this.olvColumnAlbum);
+            this.olvSongs.AllColumns.Add(this.olvColumnGenre);
+            this.olvSongs.AllColumns.Add(this.olvColumnLyricsStatus);
+            this.olvSongs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.olvSongs.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.F2Only;
+            this.olvSongs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnTitle,
+            this.olvColumnArtist,
+            this.olvColumnAlbum,
+            this.olvColumnGenre,
+            this.olvColumnLyricsStatus});
+            this.olvSongs.EmptyListMsg = "The library is empty";
+            this.olvSongs.EmptyListMsgFont = new System.Drawing.Font("Lucida Sans", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.olvSongs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.olvSongs.FullRowSelect = true;
+            this.olvSongs.GroupWithItemCountFormat = "{0} ({1} songs)";
+            this.olvSongs.GroupWithItemCountSingularFormat = "{0} (only {1} song)";
+            this.olvSongs.HideSelection = false;
+            this.olvSongs.ItemRenderer = null;
+            this.olvSongs.Location = new System.Drawing.Point(3, 3);
+            this.olvSongs.Name = "olvSongs";
+            this.olvSongs.ShowGroups = false;
+            this.olvSongs.ShowImagesOnSubItems = true;
+            this.olvSongs.ShowItemCountOnGroups = true;
+            this.olvSongs.ShowItemToolTips = true;
+            this.olvSongs.Size = new System.Drawing.Size(651, 362);
+            this.olvSongs.SmallImageList = this.imageList16;
+            this.olvSongs.TabIndex = 0;
+            this.olvSongs.UseAlternatingBackColors = true;
+            this.olvSongs.UseCompatibleStateImageBehavior = false;
+            this.olvSongs.View = System.Windows.Forms.View.Details;
+            this.olvSongs.VirtualMode = true;
+            this.olvSongs.SelectionChanged += new System.EventHandler(this.olvSongs_SelectionChanged);
+            // 
+            // olvColumnTitle
+            // 
+            this.olvColumnTitle.AspectName = "Title";
+            this.olvColumnTitle.Text = "Title";
+            this.olvColumnTitle.UseInitialLetterForGroup = true;
+            this.olvColumnTitle.Width = 143;
+            // 
+            // olvColumnArtist
+            // 
+            this.olvColumnArtist.AspectName = "Artist";
+            this.olvColumnArtist.Text = "Artist";
+            this.olvColumnArtist.Width = 132;
+            // 
+            // olvColumnAlbum
+            // 
+            this.olvColumnAlbum.AspectName = "Album";
+            this.olvColumnAlbum.Text = "Album";
+            this.olvColumnAlbum.Width = 128;
+            // 
+            // olvColumnGenre
+            // 
+            this.olvColumnGenre.AspectName = "Genre";
+            this.olvColumnGenre.Text = "Genre";
+            this.olvColumnGenre.Width = 110;
+            // 
+            // olvColumnLyricsStatus
+            // 
+            this.olvColumnLyricsStatus.AspectName = "LyricsStatusString";
+            this.olvColumnLyricsStatus.FillsFreeSpace = true;
+            this.olvColumnLyricsStatus.IsEditable = false;
+            this.olvColumnLyricsStatus.Text = "Lyrics Status";
             // 
             // Form1
             // 
@@ -670,6 +670,7 @@
             this.Name = "Form1";
             this.Text = "Lyrics Fetcher";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.Form1_Layout);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -680,9 +681,9 @@
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.olvSongs)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olvSongs)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -719,7 +720,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem chooseLibraryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemChooseLibrary;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;

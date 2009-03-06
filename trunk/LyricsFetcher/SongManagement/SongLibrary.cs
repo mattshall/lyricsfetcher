@@ -64,7 +64,7 @@ namespace LyricsFetcher
         public LyricsCache Cache {
             get {
                 if (this.cache == null) {
-                    this.cache = new LyricsCache();
+                    this.cache = new LyricsCache(this.GetType().Name);
                     this.cache.LoadLyricsCache();
                 }
                 return this.cache;

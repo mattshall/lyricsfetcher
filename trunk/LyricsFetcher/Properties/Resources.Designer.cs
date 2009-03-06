@@ -148,6 +148,13 @@ namespace LyricsFetcher.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap splashscreen {
+            get {
+                object obj = ResourceManager.GetObject("splashscreen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap stop24 {
             get {
                 object obj = ResourceManager.GetObject("stop24", resourceCulture);
