@@ -383,6 +383,11 @@ namespace LyricsFetcher
             this.buttonSearch.Enabled = isSingleSelection && this.isNetworkAvailable;
             this.buttonFetch.Enabled = hasSelection && this.isNetworkAvailable;
             this.buttonStop.Visible = this.library.IsLoading || this.fetchManager.IsFetching;
+
+            // Disable commands that mess with the library while the library is loading
+            this.toolStripMenuItemChooseLibrary.Enabled = !this.library.IsLoading;
+            this.toolStripMenuItemReloadLibrary.Enabled = !this.library.IsLoading;
+            this.toolStripMenuItemDiscardCache.Enabled = !this.library.IsLoading;
         }
 
         private void UpdateStatusText()
@@ -563,18 +568,17 @@ namespace LyricsFetcher
         }
 
         private void toolStripMenuItemReloadLibrary_Click(object sender, EventArgs e) {
-            if (!this.library.IsLoading)
-                this.InitializeSongLibrary();
-
+            this.InitializeSongLibrary();
         }
 
-        private void toolStripMenuItemDiscardCache_Click(object sender, EventArgs e)
-        {
+        private void toolStripMenuItemDiscardCache_Click(object sender, EventArgs e) {
             DialogResult result = MessageBox.Show(this,
-                Properties.Resources.DiscardCacheMsg, Properties.Resources.AppName, MessageBoxButtons.OKCancel);
+                Properties.Resources.DiscardCacheMsg, Properties.Resources.AppName, MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Question);
             if (result == DialogResult.OK) {
                 this.library.DiscardCache();
-                MessageBox.Show(this, Properties.Resources.CacheDiscardedMsg, Properties.Resources.AppName, MessageBoxButtons.OK);
+                MessageBox.Show(this, Properties.Resources.CacheDiscardedMsg, 
+                    Properties.Resources.AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -597,5 +601,9 @@ namespace LyricsFetcher
         private TypedObjectListView<Song> typedOlvSongs;
 
         #endregion
+
+        private void Form1_Layout(object sender, LayoutEventArgs e) {
+            SplashScreen.CloseForm();
+        }
     }
 }

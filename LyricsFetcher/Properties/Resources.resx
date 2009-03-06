@@ -117,24 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="WindowLabelWmp" xml:space="preserve">
+    <value>LyricsFetcher - Windows Media Player Library</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="trebleclef32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\trebleclef32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="stop24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\stop24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CacheDiscardedMsg" xml:space="preserve">
-    <value>The lyrics cache has been discard. Your next library load will be significantly slower.</value>
+  <data name="SongFailedToPlayMsg" xml:space="preserve">
+    <value>This song could not be played. 
+
+The library returned this error: {0}
+
+Check to see if the underlying media file been moved or deleted.</value>
   </data>
-  <data name="trebleclef128" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\trebleclef128.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="network_offline" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\network-offline.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WindowLabelITunes" xml:space="preserve">
+    <value>LyricsFetcher - iTunes Library</value>
   </data>
   <data name="AppName" xml:space="preserve">
     <value>LyricsFetcher</value>
   </data>
-  <data name="WindowLabelITunes" xml:space="preserve">
-    <value>LyricsFetcher - iTunes Library</value>
+  <data name="trebleclef128" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\trebleclef128.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="trebleclef48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\trebleclef48.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="process_stop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\process-stop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CacheDiscardedMsg" xml:space="preserve">
+    <value>The lyrics cache has been discard. Your next library load will be significantly slower.</value>
+  </data>
+  <data name="ITunesClosedMsg" xml:space="preserve">
+    <value>The iTunes application has been closed. You must restart this application to continue finding lyrics.</value>
+  </data>
+  <data name="trebleclef32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\trebleclef32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="burn16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\burn16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DiscardCacheMsg" xml:space="preserve">
     <value>The lyrics cache is used to significantly speed up the loading of the music library. The cache is not involved with the fetching of lyrics from the internet. 
@@ -143,35 +165,16 @@ You would want to discard the cache if you had modified lyrics within the librar
 
 Are you sure you want to discard all cached lyrics?</value>
   </data>
-  <data name="stop24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\stop24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="network_offline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\network-offline.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="process_working" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\process-working.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="trebleclef48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\trebleclef48.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="process_stop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\process-stop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ITunesClosedMsg" xml:space="preserve">
-    <value>The iTunes application has been closed. You must restart this application to continue finding lyrics.</value>
-  </data>
-  <data name="WindowLabelWmp" xml:space="preserve">
-    <value>LyricsFetcher - Windows Media Player Library</value>
-  </data>
-  <data name="burn16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\burn16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SongFailedToPlayMsg" xml:space="preserve">
-    <value>This song could not be played. 
-
-The library returned this error: {0}
-
-Check to see if the underlying media file been moved or deleted.</value>
+  <data name="splashscreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\splashscreen.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

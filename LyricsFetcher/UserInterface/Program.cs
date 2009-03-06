@@ -14,6 +14,10 @@ namespace LyricsFetcher
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            SplashScreen.ShowSplashScreen();
+            Application.DoEvents();
+
             Application.Run(new Form1());
         }
     }

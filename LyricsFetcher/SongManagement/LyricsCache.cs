@@ -17,6 +17,7 @@
  * Date: 2009-02-09 4:28 PM
  *
  * CHANGE LOG:
+ * 2009-03-06 JPP  - Added Selector to cache
  * 2009-02-26 JPP  - Added HasLyrics().
  *                 - null and empty strings are now valid values for lyrics
  * 2009-02-09 JPP  Initial Version
@@ -34,6 +35,22 @@ namespace LyricsFetcher
     /// </summary>
     public class LyricsCache
     {
+        public LyricsCache() {
+            this.Selector = "";
+        }
+
+        public LyricsCache(string selector) {
+            this.Selector = selector;
+        }
+
+        /// <summary>
+        /// Get or set an extra selector that uniquely idenitifies this cache
+        /// </summary>
+        public string Selector {
+            get;
+            set;
+        }
+
         #region Cache interface
 
         /// <summary>
@@ -170,7 +187,7 @@ namespace LyricsFetcher
         {
             String path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             path = Path.Combine(path, Properties.Resources.AppName);
-            path = Path.Combine(path, "LyricsCache.bin");
+            path = Path.Combine(path, String.Format("LyricsCache{0}.bin", this.Selector ?? ""));
             return path;
         }
 
