@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ * This file holds the class that provides an animating icon within an ObjectListView.
+ *
+ * Author: Phillip Piper
+ * Date: 2009-02-14 8:28 AM
+ *
+ * CHANGE LOG:
+ * 2009-02-14 JPP  - Initial version
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -6,8 +16,21 @@ using BrightIdeasSoftware;
 
 namespace LyricsFetcher
 {
+    /// <summary>
+    /// These delegates tell an animation helper if a particular model object
+    /// should be draw with an animating icon.
+    /// </summary>
+    /// <param name="model">The model being considered</param>
+    /// <returns>Is this model animating?</returns>
     public delegate bool IsAnimatingDelegate(object model);
 
+    /// <summary>
+    /// An AnimationHelper causes the icon in a particular column of an 
+    /// ObjectListView to animate.
+    /// </summary>
+    /// <remarks>
+    /// The current implementation does not work when the ListView is showing groups.
+    /// </remarks>
     public class AnimationHelper
     {
         /// <summary>
@@ -17,8 +40,7 @@ namespace LyricsFetcher
         /// The first image in the list is used when not showing the animation.
         /// The other images are cycled.
         /// </summary>
-        public List<string> ImageNames
-        {
+        public List<string> ImageNames {
             get { return this.imageNames; }
             set { this.imageNames = value; }
         }
@@ -27,10 +49,9 @@ namespace LyricsFetcher
         /// <summary>
         /// Which column is going to have an animated image?
         /// </summary>
-        public OLVColumn Column
-        {
+        public OLVColumn Column {
             get { return this.column; }
-            set { 
+            set {
                 this.column = value;
                 this.column.ImageGetter = delegate(object model) {
                     if (this.IsAnimating(model)) {
@@ -47,8 +68,7 @@ namespace LyricsFetcher
         /// This delegate is called when the helper need to know if a given
         /// model is currently being animated
         /// </summary>
-        public IsAnimatingDelegate IsAnimatingGetter
-        {
+        public IsAnimatingDelegate IsAnimatingGetter {
             get { return this.isAnimatingGetter; }
             set { this.isAnimatingGetter = value; }
         }
@@ -57,8 +77,7 @@ namespace LyricsFetcher
         /// <summary>
         /// Which ObjectListView is the parent of this helper?
         /// </summary>
-        public ObjectListView ListView
-        {
+        public ObjectListView ListView {
             get {
                 if (this.Column == null)
                     return null;
@@ -71,10 +90,9 @@ namespace LyricsFetcher
         /// How many milliseconds should elapse between frames of
         /// the animation?
         /// </summary>
-        public int MillisecondsBetweenAnimations
-        {
+        public int MillisecondsBetweenAnimations {
             get { return this.millisecondsBetweenAnimations; }
-            set { 
+            set {
                 this.millisecondsBetweenAnimations = value;
                 if (this.tickler != null)
                     this.tickler.Interval = this.millisecondsBetweenAnimations;
@@ -90,8 +108,15 @@ namespace LyricsFetcher
         /// <param name="imageSize">How big is each individual image</param>
         /// <param name="maximumImages">At most this many images will be extracted from
         /// the composite</param>
-        public void SetCompositeAnimationImage(Bitmap composite, Size imageSize, int maximumImages)
-        {
+        /// <remarks>
+        /// <para>
+        /// The images are animated row-by-row, not column-by-column.
+        /// </para>
+        /// <para>
+        /// This replaces any previous ImageNames setting.
+        /// </para>
+        /// </remarks>
+        public void SetCompositeAnimationImage(Bitmap composite, Size imageSize, int maximumImages) {
             this.ImageNames.Clear();
 
             int numHorizontal = composite.Size.Width / imageSize.Width;
@@ -126,8 +151,7 @@ namespace LyricsFetcher
         /// </summary>
         /// <param name="model"></param>
         /// <returns>The models current position in the animation cycle</returns>
-        private int GetAnimationIndex(object model)
-        {
+        private int GetAnimationIndex(object model) {
             if (!this.animationIndexMap.ContainsKey(model))
                 this.animationIndexMap[model] = 1;
 
@@ -140,8 +164,7 @@ namespace LyricsFetcher
         /// </summary>
         /// <param name="model">The model to consider</param>
         /// <returns>Is this model showing an animated image</returns>
-        private bool IsAnimating(object model)
-        {
+        private bool IsAnimating(object model) {
             if (this.IsAnimatingGetter == null)
                 return false;
             else
@@ -155,8 +178,7 @@ namespace LyricsFetcher
         /// <summary>
         /// Start the animations rolling
         /// </summary>
-        public void Start()
-        {
+        public void Start() {
             // Create a timer that will fire every MillisecondsBetweenAnimations.
             // By setting SynchronizingObject, the timer will invoke the elapsed event
             // on the UI thread.
@@ -164,8 +186,8 @@ namespace LyricsFetcher
                 this.tickler = new System.Timers.Timer(this.MillisecondsBetweenAnimations);
                 this.tickler.SynchronizingObject = this.ListView;
                 this.tickler.Elapsed += new System.Timers.ElapsedEventHandler(tickler_Elapsed);
-            } 
-            
+            }
+
             this.tickler.Start();
         }
         private System.Timers.Timer tickler;
@@ -173,15 +195,13 @@ namespace LyricsFetcher
         /// <summary>
         /// Stop the animations
         /// </summary>
-        public void Stop()
-        {
+        public void Stop() {
             if (this.tickler != null) {
                 this.tickler.Stop();
             }
         }
 
-        void tickler_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
+        void tickler_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
             // Handle death/destruction/hiding
             if (this.Column == null ||
                 this.ListView == null ||
@@ -196,7 +216,7 @@ namespace LyricsFetcher
             // Run through each visible row, checking to see if it should be animated
             int topIndex = this.ListView.TopItemIndex;
             int bottomIndex = topIndex + this.ListView.RowsPerPage;
-            for (int i = topIndex; i <= bottomIndex; i++ ) {
+            for (int i = topIndex; i <= bottomIndex; i++) {
                 OLVListItem olvi = this.ListView.GetItem(i);
                 if (olvi == null)
                     continue;
@@ -220,7 +240,7 @@ namespace LyricsFetcher
                     if (newIndex >= this.ImageNames.Count - 1)
                         newIndex = 1;
                     this.animationIndexMap[animatingModel] = newIndex;
-                    
+
                     // For virtual lists, it is enough to redraw the cell, 
                     // but for non-owner drawn, we have to be more forceful
                     if (!this.ListView.VirtualMode) {
