@@ -5,7 +5,7 @@
  * Date: 2009-02-07 11:15 AM
  *
  * Change log:
- * 2009-03-03  JPP  Added LyricsFly 
+ * 2009-03-03  JPP  Added LyricsFly
  * 2009-02-07  JPP  Initial version
  */
 
@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
@@ -27,14 +28,14 @@ namespace LyricsFetcher {
     /// time in different threads.
     /// </remarks>
     public interface ILyricsSource {
-        
+
         /// <summary>
         /// Gets the name of this source
         /// </summary>
         string Name {
             get;
         }
-        
+
         /// <summary>
         /// Fetch the lyrics for the given song
         /// </summary>
@@ -64,12 +65,21 @@ namespace LyricsFetcher {
         /// <returns>The lyrics or an empty string if the lyrics could not be found</returns>
         public string GetLyrics(Song s) {
             LyricWiki lyricWiki = new LyricWiki();
-            LyricsResult lyricsResult = lyricWiki.getSong(s.Artist, s.Title);
-            if (lyricsResult.lyrics == "Not found")
-                return String.Empty;
+            try {
+                LyricsResult lyricsResult = lyricWiki.getSong(s.Artist, s.Title);
+                if (lyricsResult.lyrics == "Not found")
+                    return String.Empty;
 
-            string str = lyricsResult.lyrics.Replace("\r", String.Empty);
-            return str.Replace("\n", System.Environment.NewLine);
+                Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
+                string str = Encoding.UTF8.GetString(latin1.GetBytes(lyricsResult.lyrics));
+                str = str.Replace("\r", String.Empty);
+                return str.Replace("\n", System.Environment.NewLine);
+            }
+            catch (Exception ex) {
+                // Many things can do wrong here, but there's nothing we can do it fix them
+                System.Diagnostics.Debug.WriteLine(ex);
+                return String.Empty;
+            }
         }
     }
 
@@ -92,31 +102,31 @@ namespace LyricsFetcher {
         /// </summary>
         /// <param name="s">The song whose lyrics are to be fetched</param>
         /// <returns>The lyrics or an empty string if the lyrics could not be found</returns>
-        public string GetLyrics(Song s) {
-            // Lyrdb can't handle single or double quotes in the title (as of 12/1/2008)
-            // So we just remove them
-            string title = s.Title.Replace("'", "");
-            title = title.Replace("\"", "");
+    public string GetLyrics(Song s) {
+        // Lyrdb can't handle single or double quotes in the title (as of 12/1/2008)
+        // So we just remove them
+        string title = s.Title.Replace("'", "");
+        title = title.Replace("\"", "");
 
-            string queryUrl = String.Format(Properties.Settings.Default.LyrDbLookupUrl, s.Artist, title);
+        string queryUrl = String.Format(Properties.Settings.Default.LyrDbLookupUrl, s.Artist, title);
 
-            WebClient client = new WebClient();
-            string result = client.DownloadString(queryUrl);
-            if (result == String.Empty)
-                return String.Empty;
-
-            foreach (string x in result.Split('\n')) {
-                string id = x.Split('\\')[0];
-                Uri lyricsUrl = new Uri(Properties.Settings.Default.LyrDbGetUrl + id);
-                string lyrics = client.DownloadString(lyricsUrl);
-                if (lyrics != String.Empty)
-                    return lyrics;
-            }
-
+        WebClient client = new WebClient();
+        string result = client.DownloadString(queryUrl);
+        if (result == String.Empty)
             return String.Empty;
+
+        foreach (string x in result.Split('\n')) {
+            string id = x.Split('\\')[0];
+            Uri lyricsUrl = new Uri(Properties.Settings.Default.LyrDbGetUrl + id);
+            string lyrics = client.DownloadString(lyricsUrl);
+            if (lyrics != String.Empty)
+                return lyrics;
+        }
+
+        return String.Empty;
         }
     }
-    
+
     /// <summary>
     /// This source tries to fetch song lyrics from the LyricsFly site (www.lyricsfly.com)
     /// </summary>
@@ -130,7 +140,7 @@ namespace LyricsFetcher {
                 return "LyricsFly";
             }
         }
-        
+
         /// <summary>
         /// Fetch the lyrics for the given song
         /// </summary>
@@ -138,7 +148,7 @@ namespace LyricsFetcher {
         /// <returns>The lyrics or an empty string if the lyrics could not be found</returns>
         public string GetLyrics(Song s) {
 
-            string queryUrl = String.Format(Properties.Settings.Default.LyricsFlyApiUrl, 
+            string queryUrl = String.Format(Properties.Settings.Default.LyricsFlyApiUrl,
                 Properties.Settings.Default.LyricsFlyUserId, s.Artist, s.Title);
 
             WebClient client = new WebClient();
@@ -148,7 +158,7 @@ namespace LyricsFetcher {
 
             /*
              * The following is taken from the LyricsFly website (http://lyricsfly.com/api/)
-             * 
+             *
 All API calls return an XML document. The following is an example of the output:
 <?xml version="1.0" encoding="utf-8"?>
 -<start>
