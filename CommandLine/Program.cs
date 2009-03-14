@@ -12,19 +12,18 @@ using LyricsFetcher;
 using iTunesLib;
 using WMPLib;
 
+using WMFSDKWrapper;
+
 public class TestSong : Song
 {
     public TestSong(string title, string artist, string album, string genre) :
-        base(title, artist, album, genre)
-    {
+        base(title, artist, album, genre) {
     }
 
-    public override void Commit()
-    {
+    public override void Commit() {
     }
 
-    public override void GetLyrics()
-    {
+    public override void GetLyrics() {
     }
 }
 
@@ -32,6 +31,17 @@ namespace LyricsFetcher.CommandLine
 {
     class Program
     {
+       
+
+        static void TestWMPLyrics() {
+            WindowsMediaPlayer wmpPlayer = new WindowsMediaPlayer();
+            IWMPPlaylist playlist = wmpPlayer.mediaCollection.getByAttribute("MediaType", "audio");
+            IWMPMedia media = playlist.get_Item(100);
+            Console.WriteLine(media.name);
+            Console.WriteLine(media.getItemInfo("Lyrics"));
+            //media.setItemInfo("Lyrics", "");
+        }
+
         static void TestSecondTry() {
             // Is it actually worthwhile doing the second or subsequent attempt?
             ITunesLibrary lib = new ITunesLibrary();
@@ -136,115 +146,59 @@ namespace LyricsFetcher.CommandLine
             System.Diagnostics.Debug.WriteLine(e.Status);
         }
 
+        static void TestMetaDataEditor() {
+            string file = @"C:\Documents and Settings\Admin_2\My Documents\My Music\iTunes\iTunes Music\After the fire\Der Kommissar\01 Der Kommissar.wma";
+            using (MetaDataEditor mde = new MetaDataEditor(file)) {
+                //mde.SetFieldValue("WM/Lyrics", "These are some more of my favourite things");
+                //mde.SetFieldValue("WM/Genre", "80's rock");
+                Console.WriteLine(mde.GetFieldValue("WM/Year"));
+                Console.WriteLine(mde.GetFieldValue("WM/Lyrics"));
+                Console.WriteLine(mde.GetFieldValue("Genre"));
+                Console.WriteLine(mde.GetFieldValue("WM/Publisher"));
+                Console.WriteLine(mde.GetFieldValue("unknown"));
+            }
+        }
+
+        static void TestMetaDataEditor2() {
+            WindowsMediaPlayer wmpPlayer = new WindowsMediaPlayer();
+            IWMPPlaylist playlist = wmpPlayer.mediaCollection.getByAttribute("MediaType", "audio");
+            IWMPMedia media = playlist.get_Item(100);
+            Console.WriteLine(media.name);
+            Console.WriteLine(media.getItemInfo("WM/Genre"));
+            Console.WriteLine("-");
+
+            using (MetaDataEditor mde = new MetaDataEditor(media.sourceURL)) {
+                //mde.SetFieldValue("WM/Lyrics", "MORE LIKE THIS things");
+                //mde.SetFieldValue("WM/Genre", "80's rock");
+                Console.WriteLine(mde.GetFieldValue("WM/Year"));
+                Console.WriteLine(mde.GetFieldValue("WM/Lyrics"));
+                Console.WriteLine(mde.GetFieldValue("WM/Genre"));
+                Console.WriteLine(mde.GetFieldValue("WM/Publisher"));
+                Console.WriteLine(mde.GetFieldValue("unknown"));
+            }
+        }
+
+        static void TestLyricsSource() {
+            ILyricsSource strategy = new LyricsSourceLyricWiki();
+            //ILyricsSource strategy = new LyricsSourceLyrdb();
+            TestSong song = new TestSong("I Love to Move in Here", "Moby", "Last Night", "");
+
+            Console.WriteLine(song);
+            Console.WriteLine(strategy.GetLyrics(song));
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("start");
-            TestSecondTry();
+            TestLyricsSource();
+            Console.WriteLine("done");
             Console.ReadKey();
 
-            //TestSong s = new TestSong("Desire2", "U2", "Pop", "Rock");
-            //Console.WriteLine(s);
-            //LyricsSourceLyricsFly source = new LyricsSourceLyricsFly();
-            //string lyrics = source.GetLyrics(s);
-            //Console.WriteLine(lyrics);
-            //Console.ReadKey();
-
-            //Console.WriteLine(ITunes.Instance.Version);
-            //int i1, i2, i3, i4, i5, i6;
-            //ITunes.Instance.AllTracks[3].GetITObjectIDs(out i1, out i2, out i3, out i4);
-
-            //Stopwatch sw1 = new Stopwatch();
-            //sw1.Start();
-            //for (int i = 1; i < 1000; i++) {
-            //    ITunes.Instance.GetObjectByIds(i1, i2, i3, i4);
-            //}
-            //sw1.Stop();
-            //Console.WriteLine("GetObjectByIds={0}ms", sw1.ElapsedMilliseconds);
-            //ITunes.Instance.GetPersistentIds(ITunes.Instance.AllTracks[4], out i5, out i6);
-
-            //Stopwatch sw2 = new Stopwatch();
-            //sw2.Start();
-            //for (int i = 1; i < 1000; i++) {
-            //    ITunes.Instance.GetTrackByPersistentIds(i5, i6);
-            //}
-            //sw2.Stop();
-            //Console.WriteLine("GetTrackByPersistentIds={0}ms", sw2.ElapsedMilliseconds);
-
-            //// Load the whole xml file into memory, and then remove the DTD.
-            //// We remove that so we can read the xml even when not connected to the network
-            //string xml = File.ReadAllText(ITunes.Instance.XmlPath);
-            //int docTypeStart = xml.IndexOf("<!DOCTYPE");
-            //int docTypeEnd = xml.IndexOf("0.dtd\">") + "0.dtd\">".Length;
-            //string xml2 = xml.Remove(docTypeStart, docTypeEnd - docTypeStart);
-
-            //XPathDocument doc = new XPathDocument(new StringReader(xml2));
-            //XPathNavigator nav = doc.CreateNavigator();
-
-            //// Move to plist
-            //bool success = nav.MoveToChild("plist", "");
-
-            //// Move to master library
-            //success = nav.MoveToChild("dict", "");
-
-            //// Move to tracks
-            //success = nav.MoveToChild("dict", "");
-
-            //// Move to first track info
-            //success = nav.MoveToChild("dict", "");
-
-            //ArrayList allData = new ArrayList();
-            //while (success) {
-            //    success = nav.MoveToFirstChild();
-            //    Hashtable data = new Hashtable();
-
-            //    while (success) {
-            //        string key = nav.Value;
-            //        success = nav.MoveToNext();
-            //        string value = nav.Value;
-            //        data[key] = value;
-            //        success = nav.MoveToNext();
-            //    }
-            //    allData.Add(data);
-            //    success = nav.MoveToParent();
-            //    success = nav.MoveToNext("dict", "");
-            //}
-            //Console.WriteLine("Read {0} songs", allData.Count);
-            //Console.ReadKey();
-
-            //------------------------------------------------------------
-
-            //string xml = File.ReadAllText(ITunes.Instance.XmlPath);
-            //int docTypeStart = xml.IndexOf("<!DOCTYPE");
-            //int docTypeEnd = xml.IndexOf("0.dtd\">") + "0.dtd\">".Length;
-            //string xml2 = xml.Remove(docTypeStart, docTypeEnd - docTypeStart);
-
-            //using (XmlTextReader reader = new XmlTextReader(new StringReader(xml2))) {
-            //    reader.MoveToContent();
-            //    reader.ReadToDescendant("dict"); // move to library
-            //    reader.ReadToDescendant("dict"); // move to track list
-
-            //    int i = 0;
-            //    while (reader.Read()) {
-            //            switch (reader.NodeType) {
-            //                case XmlNodeType.Element:
-            //                    Console.Write("<{0}", reader.Name);
-            //                    while (reader.MoveToNextAttribute()) {
-            //                        Console.Write(" {0}='{1}'", reader.Name, reader.Value);
-            //                    }
-            //                    Console.Write(">");
-            //                    break;
-            //                case XmlNodeType.Text:
-            //                    Console.Write(reader.Value);
-            //                    break;
-            //                case XmlNodeType.EndElement:
-            //                    Console.Write("</{0}>", reader.Name);
-            //                    break;
-            //            }
-            //        if (i > 100)
-            //            break;
-            //        i++;
-            //    }
-            //}
+            //Console.WriteLine("start");
+            //string value = GetFieldByName(@"C:\Documents and Settings\Admin_2\My Documents\My Music\iTunes\iTunes Music\After the fire\Der Kommissar\01 Der Kommissar.mp3", "WM/Lyrics");
+            //Console.WriteLine(value);
+            //Console.WriteLine(GetFieldByName(@"C:\Documents and Settings\Admin_2\My Documents\My Music\iTunes\iTunes Music\After the fire\Der Kommissar\01 Der Kommissar.mp3", "WM/Genre"));
+            //Console.WriteLine(GetFieldByName(@"C:\Documents and Settings\Admin_2\My Documents\My Music\iTunes\iTunes Music\After the fire\Der Kommissar\01 Der Kommissar.mp3", "WM/Publisher"));
             //Console.ReadKey();
 
             //------------------------------------------------------------
