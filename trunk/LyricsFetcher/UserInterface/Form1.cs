@@ -15,12 +15,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Web;
 using System.Windows.Forms;
 
@@ -47,31 +44,6 @@ namespace LyricsFetcher
 
         #endregion
 
-        #region Form Events
-
-        private void Form1_Load(object sender, EventArgs e) {
-            this.InitializeNetworkAvailability();
-            this.InitializeObjectListView();
-            this.LoadUserPreferences();
-            this.InitializeFetchManager();
-            this.InitializeSongLibrary();
-            this.InitializeDetails();
-            this.EnableControls();
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (this.library != null)
-                this.library.Close();
-            
-            if (this.fetchManager != null)
-                this.fetchManager.CancelAll();
-
-            this.SaveUserPreferences();
-        }
-
-        #endregion
-
         #region Initializing/Terminating
 
         /// <summary>
@@ -84,7 +56,7 @@ namespace LyricsFetcher
                     this.BeginInvoke(new MethodInvoker(this.CheckNetworkStatus));
                 }
             );
-            // Display the current state 
+            // Display the current state
             this.CheckNetworkStatus();
         }
 
@@ -100,7 +72,7 @@ namespace LyricsFetcher
                 if (String.IsNullOrEmpty(song.Artist))
                     return -1;
                 else
-                    return "group"; 
+                    return "group";
             };
 
             // Show the current fetch status if there is one
@@ -262,18 +234,15 @@ namespace LyricsFetcher
         /// <summary>
         /// Update the UI to display the network availability
         /// </summary>
-        private void CheckNetworkStatus()
-        {
+        private void CheckNetworkStatus() {
             // Calculating this value is expensive so we cache it
             this.isNetworkAvailable = NetworkInterface.GetIsNetworkAvailable();
             if (this.isNetworkAvailable) {
                 this.toolStripStatusLabel2.Image = null;
                 this.toolStripStatusLabel2.Text = "";
-                this.toolStripStatusLabel2.Enabled = false;
             } else {
-                this.toolStripStatusLabel2.Image = global::LyricsFetcher.Properties.Resources.burn16;
+                this.toolStripStatusLabel2.Image = Properties.Resources.burn16;
                 this.toolStripStatusLabel2.Text = "No network available";
-                this.toolStripStatusLabel2.Enabled = true;
             }
         }
         private bool isNetworkAvailable;
@@ -312,7 +281,7 @@ namespace LyricsFetcher
         }
 
         /// <summary>
-        /// The text in the given text box may have changed. 
+        /// The text in the given text box may have changed.
         /// If it has, update all selected songs with its new value.
         /// </summary>
         /// <param name="tb">The text box whose value has changed</param>
@@ -369,7 +338,7 @@ namespace LyricsFetcher
             this.buttonSelectAll.Enabled = hasSongs;
             this.buttonSelectNone.Enabled = hasSongs;
 
-            // The Play button is only enabled when one song is selected. 
+            // The Play button is only enabled when one song is selected.
             // It can then function as either a start or stop button.
             this.buttonPlay.Enabled = isSingleSelection;
             if (isSingleSelection && this.library.IsPlaying(this.olvSongs.SelectedObject as Song)) {
@@ -431,6 +400,10 @@ namespace LyricsFetcher
                 this.ConfigureAutoCompleteDetails();
                 this.EnableControls();
                 this.UpdateStatusText();
+
+                // Release the cache to save some resources
+                this.library.Cache = null;
+                GC.Collect();
             }));
         }
 
@@ -470,6 +443,30 @@ namespace LyricsFetcher
 
         #region UI Event handlers
 
+        private void Form1_Load(object sender, EventArgs e) {
+            this.InitializeNetworkAvailability();
+            this.InitializeObjectListView();
+            this.LoadUserPreferences();
+            this.InitializeFetchManager();
+            this.InitializeSongLibrary();
+            this.InitializeDetails();
+            this.EnableControls();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
+            if (this.library != null)
+                this.library.Close();
+
+            if (this.fetchManager != null)
+                this.fetchManager.CancelAll();
+
+            this.SaveUserPreferences();
+        }
+
+        private void Form1_Layout(object sender, LayoutEventArgs e) {
+            SplashScreen.CloseForm();
+        }
+
         private void buttonFetch_Click(object sender, EventArgs e) {
             foreach (Song song in this.olvSongs.SelectedObjects)
                 this.fetchManager.Queue(song);
@@ -477,7 +474,7 @@ namespace LyricsFetcher
             this.EnableControls();
         }
 
-        private void buttonSelectUntried_Click(object sender, EventArgs e) 
+        private void buttonSelectUntried_Click(object sender, EventArgs e)
         {
             using (new WaitCursor()) {
                 this.olvSongs.SelectedObjects = this.library.UntriedSongs;
@@ -523,7 +520,7 @@ namespace LyricsFetcher
                 }
                 catch (COMException ex) {
                     string msg = String.Format(Properties.Resources.SongFailedToPlayMsg, ex.Message);
-                    MessageBox.Show(this, msg, Properties.Resources.AppName, 
+                    MessageBox.Show(this, msg, Properties.Resources.AppName,
                         MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
@@ -577,7 +574,7 @@ namespace LyricsFetcher
                 MessageBoxIcon.Question);
             if (result == DialogResult.OK) {
                 this.library.DiscardCache();
-                MessageBox.Show(this, Properties.Resources.CacheDiscardedMsg, 
+                MessageBox.Show(this, Properties.Resources.CacheDiscardedMsg,
                     Properties.Resources.AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -602,8 +599,9 @@ namespace LyricsFetcher
 
         #endregion
 
-        private void Form1_Layout(object sender, LayoutEventArgs e) {
-            SplashScreen.CloseForm();
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
+            System.Diagnostics.Debug.WriteLine("closed");
         }
+
     }
 }

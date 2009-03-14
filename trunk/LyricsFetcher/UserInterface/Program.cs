@@ -15,6 +15,7 @@ namespace LyricsFetcher
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            //Control.CheckForIllegalCrossThreadCalls = false;
             SplashScreen.ShowSplashScreen();
             Application.DoEvents();
 

@@ -100,6 +100,7 @@ namespace LyricsFetcher
             if (ms_frmSplash != null)
                 return;
             ms_oThread = new Thread(new ThreadStart(SplashScreen.ShowForm));
+            ms_oThread.Name = "SplashScreenThread";
             ms_oThread.IsBackground = true;
             ms_oThread.Start();
         }
@@ -113,11 +114,11 @@ namespace LyricsFetcher
         // A static method to close the SplashScreen
         static public void CloseForm() {
             if (ms_frmSplash != null && ms_frmSplash.IsDisposed == false) {
-                // Make it start going away.
-                ms_frmSplash.Opacity = 1.0;
-                ms_frmSplash.m_dblOpacityIncrement = -ms_frmSplash.m_dblOpacityDecrement;
+                ms_frmSplash.Invoke(new MethodInvoker(delegate {
+                    ms_frmSplash.Opacity = 1.0;
+                    ms_frmSplash.m_dblOpacityIncrement = -ms_frmSplash.m_dblOpacityDecrement;
+                }));
             }
-            ms_oThread = null;	// we don't need these any more.
             ms_frmSplash = null;
         }
 
@@ -128,13 +129,16 @@ namespace LyricsFetcher
         private void timer1_Tick(object sender, System.EventArgs e) {
             // Prevent opacity from becoming more than 1 or less than 0
             this.Opacity = Math.Min(1.0, Math.Max(0.0, this.Opacity + m_dblOpacityIncrement));
-            if (this.Opacity <= 0.0)
-                this.Close();
+            if (this.Opacity <= 0.0) {
+                this.timer1.Stop();
+                //this.Close();
+                Application.ExitThread();
+            }
         }
 
         // Close the form if they double click on it.
         private void SplashScreen_DoubleClick(object sender, System.EventArgs e) {
-            CloseForm();
+            SplashScreen.CloseForm();
         }
     }
 }
