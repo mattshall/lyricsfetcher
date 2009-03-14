@@ -5,6 +5,7 @@
  * Date: 2009-02-06 4:28 PM
  *
  * CHANGE LOG:
+ * 2009-03-14 JPP  Changed to use MetaDataEditor to update lyrics
  * 2009-02-06 JPP  Initial Version
  */
 
@@ -27,8 +28,9 @@ namespace LyricsFetcher
         }
 
         public override void Close() {
-            // WMP doesn't have a separate interface, so if we close the library, we 
-            // have to stop playing any current songs. 
+            // WMP is embedded in our program, so if we close the library, we 
+            // have to stop playing any current songs, otherwise the user has no
+            // way to stop the music.
             this.StopPlaying();
             base.Close();
         }
@@ -41,14 +43,14 @@ namespace LyricsFetcher
             if (Wmp.Instance.Player.playState != WMPPlayState.wmppsPlaying)
                 return false;
 
-            return Wmp.Instance.Player.currentMedia.get_isIdentical(wmpSong.media);
+            return Wmp.Instance.Player.currentMedia.get_isIdentical(wmpSong.Media);
         }
 
         public override void Play(Song song) {
             WmpSong wmpSong = song as WmpSong;
             if (wmpSong != null) {
-                Wmp.Instance.Player.currentPlaylist.appendItem(wmpSong.media);
-                Wmp.Instance.Player.controls.playItem(wmpSong.media);
+                Wmp.Instance.Player.currentPlaylist.appendItem(wmpSong.Media);
+                Wmp.Instance.Player.controls.playItem(wmpSong.Media);
             }
         }
 
@@ -72,39 +74,6 @@ namespace LyricsFetcher
 
         #endregion
     }
-
-    /// <summary>
-    /// Instances of these songs know how to load and store
-    /// themselves from WindowMediaPlayer store.
-    /// </summary>
-    public class WmpSong : Song
-    {
-        public WmpSong(IWMPMedia iWmpMedia) {
-            this.media = iWmpMedia;
-            this.Title = this.media.getItemInfo(Wmp.WMTitle);
-            this.Artist = this.media.getItemInfo(Wmp.WMAuthor);
-            this.Album = this.media.getItemInfo(Wmp.WMAlbumTitle);
-            this.Genre = this.media.getItemInfo(Wmp.WMGenre);
-        }
-
-        public override void Commit() {
-            if (this.media == null)
-                return;
-
-            this.media.setItemInfo(Wmp.WMTitle, this.Title);
-            this.media.setItemInfo(Wmp.WMAuthor, this.Artist);
-            this.media.setItemInfo(Wmp.WMAlbumTitle, this.Album);
-            this.media.setItemInfo(Wmp.WMGenre, this.Genre);
-            this.media.setItemInfo(Wmp.WMLyrics, this.Lyrics);
-        }
-
-        public override void GetLyrics() {
-            this.Lyrics = this.media.getItemInfo(Wmp.WMLyrics);
-        }
-
-        internal IWMPMedia media;
-    }
-
 
     public class WmpSongLoader : SongLoader
     {

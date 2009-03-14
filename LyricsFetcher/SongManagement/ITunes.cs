@@ -125,7 +125,7 @@ namespace LyricsFetcher
         #region Commands
 
         /// <summary>
-        /// Return the object identified by the four given ids. 
+        /// Return the object identified by the four given ids.
         /// </summary>
         /// <param name="sourceId"></param>
         /// <param name="playlistId"></param>
@@ -166,7 +166,10 @@ namespace LyricsFetcher
         /// </summary>
         public void Release()
         {
-            this.iTunesApp = null;
+            if (this.iTunesApp != null) {
+                //System.Runtime.InteropServices.Marshal.ReleaseComObject(this.iTunesApp);
+                this.iTunesApp = null;
+            }
         }
 
         /// <summary>
