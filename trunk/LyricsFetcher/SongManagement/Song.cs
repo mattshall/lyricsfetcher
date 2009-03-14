@@ -29,31 +29,31 @@ namespace LyricsFetcher
     /// <summary>
     /// A Song represents a single track within a media library.
     /// </summary>
-    abstract public class Song
+abstract public class Song
+{
+    #region Constructors
+
+    public Song()
     {
-        #region Constructors
+    }
 
-        public Song()
-        {
-        }
-
-        public Song(string title, string artist, string album, string genre)
-        {
-            this.Title = title;
-            this.Artist = artist;
-            this.Album = album;
-            this.Genre = genre;
-        }
+    public Song(string title, string artist, string album, string genre)
+    {
+        this.Title = title;
+        this.Artist = artist;
+        this.Album = album;
+        this.Genre = genre;
+    }
 
         #endregion
 
         #region Public properties
 
-        public string Album;
-        public string Artist;
-        public string Genre;
-        public string Lyrics;
-        public string Title;
+        public string Album { get; set; }
+        public string Artist { get; set; }
+        public string Genre { get; set; }
+        public string Lyrics { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
         /// Return an enum indicating whether the lyrics of this song have been fetched

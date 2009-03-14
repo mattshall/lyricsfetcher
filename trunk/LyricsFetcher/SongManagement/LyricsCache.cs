@@ -35,6 +35,8 @@ namespace LyricsFetcher
     /// </summary>
     public class LyricsCache
     {
+        #region Life and death
+
         public LyricsCache() {
             this.Selector = "";
         }
@@ -42,6 +44,10 @@ namespace LyricsFetcher
         public LyricsCache(string selector) {
             this.Selector = selector;
         }
+
+        #endregion
+
+        #region Public properties
 
         /// <summary>
         /// Get or set an extra selector that uniquely idenitifies this cache
@@ -51,6 +57,8 @@ namespace LyricsFetcher
             set;
         }
 
+        #endregion
+
         #region Cache interface
 
         /// <summary>
@@ -59,8 +67,7 @@ namespace LyricsFetcher
         /// </summary>
         /// <param name="song">The song whose lyrics are to be updated</param>
         /// <returns>Returns true if the lyrics were updated</returns>
-        public bool UpdateLyrics(Song song)
-        {
+        public bool UpdateLyrics(Song song) {
             if (!this.HasLyrics(song))
                 return false;
 
@@ -92,8 +99,7 @@ namespace LyricsFetcher
         /// Remember the lyrics of the given song.
         /// </summary>
         /// <param name="song">The Song whose lyrics are to be remembered</param>
-        public void PutLyrics(Song song)
-        {
+        public void PutLyrics(Song song) {
             this.lyricsCache[this.GetKey(song)] = song.Lyrics;
         }
 
@@ -118,8 +124,7 @@ namespace LyricsFetcher
         /// <summary>
         /// Save the lyrics cache to its normal location
         /// </summary>
-        public void SaveLyricsCache()
-        {
+        public void SaveLyricsCache() {
             this.SaveLyricsCache(this.GetLyricsCachePath());
         }
 
@@ -129,8 +134,7 @@ namespace LyricsFetcher
         /// <remarks>This discards any previous cache, even if the load fails</remarks>
         /// <param name="path">The full path name to a file created by
         /// SaveLyricsCache</param>
-        public void LoadLyricsCache(string path)
-        {
+        public void LoadLyricsCache(string path) {
             this.lyricsCache = new Dictionary<string, string>();
 
             // Can't do anything more if the file doesn't exist
@@ -154,8 +158,7 @@ namespace LyricsFetcher
         /// </summary>
         /// <remarks>Any existing saved cached will be deleted.</remarks>
         /// <param name="path">The full path name of the file cache</param>
-        public void SaveLyricsCache(string path)
-        {
+        public void SaveLyricsCache(string path) {
             // Make the directory for the cache if it doesn't exist
             if (!File.Exists(Path.GetDirectoryName(path)))
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -176,15 +179,17 @@ namespace LyricsFetcher
         /// <summary>
         /// Calculate a key that can be used to identify the lyrics of this song
         /// </summary>
-        /// <param name="song"></param>
+        /// <param name="song">The song whose cache key is required</param>
         /// <returns>A key</returns>
-        private string GetKey(Song song)
-        {
+        private string GetKey(Song song) {
             return String.Format("{0}\\{1}", song.Title, song.Artist);
         }
 
-        private string GetLyricsCachePath()
-        {
+        /// <summary>
+        /// Return a full path to the cache
+        /// </summary>
+        /// <returns>Return a full path to the cache</returns>
+        private string GetLyricsCachePath() {
             String path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             path = Path.Combine(path, Properties.Resources.AppName);
             path = Path.Combine(path, String.Format("LyricsCache{0}.bin", this.Selector ?? ""));

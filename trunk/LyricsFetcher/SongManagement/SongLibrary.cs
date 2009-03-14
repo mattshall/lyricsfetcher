@@ -69,6 +69,9 @@ namespace LyricsFetcher
                 }
                 return this.cache;
             }
+            set {
+                this.cache = value;
+            }
         }
 
         /// <summary>
@@ -134,8 +137,6 @@ namespace LyricsFetcher
         /// </summary>
         abstract public void DeinitializeEvents();
 
-        #endregion
-
         /// <summary>
         /// Close this library
         /// </summary>
@@ -157,6 +158,8 @@ namespace LyricsFetcher
             this.Cache.Discard();
             this.cache = null;
         }
+
+        #endregion
 
         #region Song commands
 
