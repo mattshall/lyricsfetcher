@@ -13,6 +13,7 @@
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using iTunesLib;
 using ITDETECTORLib;
 
@@ -43,8 +44,13 @@ namespace LyricsFetcher
         public static bool HasITunes
         {
             get {
-                iTunesDetectorClass detector = new iTunesDetectorClass();
-                return detector.IsiTunesAvailable;
+                try {
+                    iTunesDetectorClass detector = new iTunesDetectorClass();
+                    return detector.IsiTunesAvailable;
+                }
+                catch (COMException) {
+                    return false;
+                }
             }
         }
 

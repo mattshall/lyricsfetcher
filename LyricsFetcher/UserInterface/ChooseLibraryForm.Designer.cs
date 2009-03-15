@@ -32,9 +32,9 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOK = new System.Windows.Forms.Button();
             this.radioButtonITunes = new System.Windows.Forms.RadioButton();
+            this.imageList32 = new System.Windows.Forms.ImageList(this.components);
             this.radioButtonWmp = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.imageList32 = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
             // 
             // buttonCancel
@@ -60,11 +60,12 @@
             // 
             // radioButtonITunes
             // 
+            this.radioButtonITunes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.radioButtonITunes.ImageKey = "iTunes";
             this.radioButtonITunes.ImageList = this.imageList32;
             this.radioButtonITunes.Location = new System.Drawing.Point(17, 30);
             this.radioButtonITunes.Name = "radioButtonITunes";
-            this.radioButtonITunes.Size = new System.Drawing.Size(118, 40);
+            this.radioButtonITunes.Size = new System.Drawing.Size(299, 40);
             this.radioButtonITunes.TabIndex = 2;
             this.radioButtonITunes.TabStop = true;
             this.radioButtonITunes.Text = "iTunes";
@@ -72,13 +73,21 @@
             this.radioButtonITunes.UseVisualStyleBackColor = true;
             this.radioButtonITunes.CheckedChanged += new System.EventHandler(this.radioButtonITunes_CheckedChanged);
             // 
+            // imageList32
+            // 
+            this.imageList32.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList32.ImageStream")));
+            this.imageList32.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList32.Images.SetKeyName(0, "WMP");
+            this.imageList32.Images.SetKeyName(1, "iTunes");
+            // 
             // radioButtonWmp
             // 
+            this.radioButtonWmp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.radioButtonWmp.ImageKey = "WMP";
             this.radioButtonWmp.ImageList = this.imageList32;
             this.radioButtonWmp.Location = new System.Drawing.Point(17, 76);
             this.radioButtonWmp.Name = "radioButtonWmp";
-            this.radioButtonWmp.Size = new System.Drawing.Size(213, 40);
+            this.radioButtonWmp.Size = new System.Drawing.Size(298, 40);
             this.radioButtonWmp.TabIndex = 3;
             this.radioButtonWmp.TabStop = true;
             this.radioButtonWmp.Text = "Windows Media Player";
@@ -91,16 +100,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(14, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(302, 16);
+            this.label1.Size = new System.Drawing.Size(300, 16);
             this.label1.TabIndex = 4;
-            this.label1.Text = "Choose the library for which library you want lyrics:";
-            // 
-            // imageList32
-            // 
-            this.imageList32.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList32.ImageStream")));
-            this.imageList32.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList32.Images.SetKeyName(0, "WMP");
-            this.imageList32.Images.SetKeyName(1, "iTunes");
+            this.label1.Text = "Choose the library for which you want to find lyrics:";
             // 
             // ChooseLibraryForm
             // 
