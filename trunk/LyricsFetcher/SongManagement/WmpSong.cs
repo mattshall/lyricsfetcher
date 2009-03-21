@@ -5,6 +5,7 @@
  * Date: 2009-03-14 8:28 AM
  *
  * CHANGE LOG:
+ * 2009-03-19 JPP  Added FullPath property
  * 2009-03-14 JPP  - Changed to use MetaDataEditor to update lyrics
  *                 - Separated from WmpLibrary.cs
  */
@@ -37,9 +38,15 @@ namespace LyricsFetcher
         /// <summary>
         /// Get or set the media object that represents the song
         /// </summary>
-        public IWMPMedia Media {
-            get;
-            set;
+        public IWMPMedia Media { get; set; }
+
+        /// <summary>
+        /// Return the full path to the underlying media file
+        /// </summary>
+        public override string FullPath {
+            get {
+                return this.Media.sourceURL;
+            }
         }
 
         /// <summary>
@@ -64,7 +71,9 @@ namespace LyricsFetcher
                 this.Media.setItemInfo(Wmp.WMAlbumTitle, this.Album);
             if (this.Media.isReadOnlyItem(Wmp.WMGenre) == false)
                 this.Media.setItemInfo(Wmp.WMGenre, this.Genre);
-            if (this.Media.isReadOnlyItem(Wmp.WMLyrics) == false) {
+
+            if (this.Media.isReadOnlyItem(Wmp.WMLyrics) == false &&
+                this.Media.getItemInfo(Wmp.WMLyrics) != this.Lyrics) {
                 /*
                  * Life is never easy. We should be able to simply say:
                  * this.Media.setItemInfo(Wmp.WMLyrics, this.Lyrics);
