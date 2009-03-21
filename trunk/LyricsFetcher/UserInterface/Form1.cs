@@ -5,6 +5,8 @@
  * Date: 2009-01-20 21:08
  *
  * CHANGE LOG:
+ * 2009-03-21  JPP  - Allow the lyrics sources to be changed via the Settings
+ *                  - Catch errors when updating metadata
  * 2009-02-15  JPP  - Added multi-object details (both showing and updating values)
  *                  - Added autocomplete to details
  *                  - Added Genre and removed Kind from visible properties
@@ -101,8 +103,29 @@ namespace LyricsFetcher
 
         private void InitializeFetchManager()
         {
-            this.fetchManager.RegisterSource(new LyricsSourceLyricWiki());
-            this.fetchManager.RegisterSource(new LyricsSourceLyrdb());
+            // Make a list of all known sources
+            List<ILyricsSource> allSources = new List<ILyricsSource>();
+            allSources.Add(new LyricsSourceLyricWiki());
+            allSources.Add(new LyricsSourceLyrdb());
+            allSources.Add(new LyricsSourceLyricsPlugin());
+            allSources.Add(new LyricsSourceLyricsFly());
+
+            // Register the sources named in the settings
+            foreach (String sourceName in Properties.Settings.Default.LyricsSources) {
+                foreach (ILyricsSource source in allSources) {
+                    if (String.Compare(source.Name, sourceName.Trim(), true) == 0) {
+                        this.fetchManager.RegisterSource(source);
+                    }
+                }
+            }
+
+            // If nothing was named in the settings, use the default sources
+            if (this.fetchManager.Sources.Count == 0) {
+                this.fetchManager.RegisterSource(new LyricsSourceLyrdb());
+                this.fetchManager.RegisterSource(new LyricsSourceLyricWiki());
+            }
+
+            // Do the other lyrics fetcher initialization
             this.fetchManager.StatusEvent += new EventHandler<FetchStatusEventArgs>(fetchManager_StatusEvent);
             this.fetchManager.AutoUpdateLyrics = true;
             this.fetchManager.Start();
@@ -294,16 +317,21 @@ namespace LyricsFetcher
                 return;
 
             // Write the changed detail into the selected objects
-            try {
-                Cursor.Current = Cursors.WaitCursor;
+            using (new WaitCursor()) {
                 foreach (Song song in songs) {
-                    ((Munger)tb.Tag).PutValue(song, tb.Text);
-                    song.Commit();
+                    ((Munger)tb.Tag).PutValue(song, tb.Text.Trim());
+                    try {
+                        song.Commit();
+                    }
+                    catch (COMException ex) {
+                        string msg = String.Format(Properties.Resources.SongFailedToUpdateMsg, song.Title, song.FullPath, ex.Message);
+                        DialogResult result = MessageBox.Show(this, msg, Properties.Resources.AppName,
+                            MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+                        if (result == DialogResult.Cancel)
+                            break;
+                    }
                 }
                 this.olvSongs.RefreshObjects(songs);
-            }
-            finally {
-                Cursor.Current = Cursors.Default;
             }
             this.EnableControls();
 
@@ -519,7 +547,7 @@ namespace LyricsFetcher
                     this.library.Play(song);
                 }
                 catch (COMException ex) {
-                    string msg = String.Format(Properties.Resources.SongFailedToPlayMsg, ex.Message);
+                    string msg = String.Format(Properties.Resources.SongFailedToPlayMsg, song.FullPath, ex.Message);
                     MessageBox.Show(this, msg, Properties.Resources.AppName,
                         MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
