@@ -20,6 +20,10 @@ public class TestSong : Song
         base(title, artist, album, genre) {
     }
 
+    public override string FullPath {
+        get { return String.Empty; }
+    }
+
     public override void Commit() {
     }
 
@@ -108,7 +112,7 @@ namespace LyricsFetcher.CommandLine
 
         static void TestSources() {
             ITunesLibrary lib = new ITunesLibrary();
-            //lib.MaxSongsToFetch = 1000;
+            lib.MaxSongsToFetch = 300;
             lib.LoadSongs();
             lib.WaitLoad();
 
@@ -120,9 +124,11 @@ namespace LyricsFetcher.CommandLine
                             status == LyricsStatus.Success);
                     }
                 );
+            TestOneSource(songs, new LyricsSourceLyricsWikiHtml());
+            //TestOneSource(songs, new LyricsSourceLyricsPlugin());
             TestOneSource(songs, new LyricsSourceLyricWiki());
-            TestOneSource(songs, new LyricsSourceLyrdb());
-            TestOneSource(songs, new LyricsSourceLyricsFly());
+            //TestOneSource(songs, new LyricsSourceLyrdb());
+            //TestOneSource(songs, new LyricsSourceLyricsFly());
         }
 
         private static void TestOneSource(List<Song> songs, ILyricsSource source) {
@@ -138,7 +144,8 @@ namespace LyricsFetcher.CommandLine
                     successes++;
             }
             sw.Stop();
-            Console.WriteLine("Successes: {0}, failure: {1}, time: {2} seconds", successes, failures, sw.Elapsed);
+            Console.WriteLine("Successes: {0}, failure: {1}, time: {2} seconds ({3} per song)", 
+                successes, failures, sw.Elapsed, sw.ElapsedMilliseconds / songs.Count);
         }
 
         static void lfm_StatusEvent(object sender, FetchStatusEventArgs e)
@@ -179,8 +186,14 @@ namespace LyricsFetcher.CommandLine
         }
 
         static void TestLyricsSource() {
-            ILyricsSource strategy = new LyricsSourceLyricWiki();
+            //ILyricsSource strategy = new LyricsSourceLyricWiki();
+            //ILyricsSource strategy = new LyricsSourceLyricsWikiHtml();
             //ILyricsSource strategy = new LyricsSourceLyrdb();
+            ILyricsSource strategy = new LyricsSourceLyricsPlugin();
+
+            //TestSong song = new TestSong("Lips don't hie", "Shakira", "Music of the Sun", "");
+            //TestSong song = new TestSong("Hips don't lie", "Shakira", "Music of the Sun", "");
+            //TestSong song = new TestSong("Pon de replay", "Rihanna", "Music of the Sun", "");
             TestSong song = new TestSong("I Love to Move in Here", "Moby", "Last Night", "");
 
             Console.WriteLine(song);
@@ -190,9 +203,7 @@ namespace LyricsFetcher.CommandLine
         static void Main(string[] args)
         {
             Console.WriteLine("start");
-            TestLyricsSource();
-            Console.WriteLine("done");
-            Console.ReadKey();
+            TestSources();
 
             //Console.WriteLine("start");
             //string value = GetFieldByName(@"C:\Documents and Settings\Admin_2\My Documents\My Music\iTunes\iTunes Music\After the fire\Der Kommissar\01 Der Kommissar.mp3", "WM/Lyrics");
@@ -236,13 +247,6 @@ namespace LyricsFetcher.CommandLine
             //System.Diagnostics.Debug.WriteLine("========");
 
             //------------------------------------------------------------
-            //ILyricsSource strategy = new LyricsSourceLyricWiki();
-            //ILyricsSource strategy = new LyricsSourceLyrdb();
-            //TestSong song = new TestSong("Pon de Replay", "Rihanna", "Music of the Sun", "");
-
-            //System.Diagnostics.Debug.WriteLine(strategy.GetLyrics(song));
-
-            //------------------------------------------------------------
 
             //System.Diagnostics.Debug.WriteLine(Wmp.Instance.Player.versionInfo);
 
@@ -260,6 +264,9 @@ namespace LyricsFetcher.CommandLine
             //    IWMPMedia media = playlist.get_Item(i);
             //    System.Diagnostics.Debug.WriteLine(media.name);
             //}
+
+            Console.WriteLine("done");
+            Console.ReadKey();
         }
     }
 }
