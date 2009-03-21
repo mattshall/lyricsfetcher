@@ -136,15 +136,24 @@ namespace LyricsFetcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This song could not be played. 
+        ///   Looks up a localized string similar to This song could not be played. Check to see if the underlying media file (&quot;{0}&quot;) been moved or deleted.
         ///
-        ///The library returned this error: {0}
-        ///
-        ///Check to see if the underlying media file been moved or deleted..
+        ///The library returned this error: {1}.
         /// </summary>
         internal static string SongFailedToPlayMsg {
             get {
                 return ResourceManager.GetString("SongFailedToPlayMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The song &quot;{0}&quot; could not be updated. It is possible that the underlying media file (&quot;{1}&quot;) is a format that Windows Media cannot update.
+        ///
+        ///The library returned this error: {2}.
+        /// </summary>
+        internal static string SongFailedToUpdateMsg {
+            get {
+                return ResourceManager.GetString("SongFailedToUpdateMsg", resourceCulture);
             }
         }
         

@@ -125,11 +125,9 @@
     <value>..\Resources\stop24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SongFailedToPlayMsg" xml:space="preserve">
-    <value>This song could not be played. 
+    <value>This song could not be played. Check to see if the underlying media file ("{0}") been moved or deleted.
 
-The library returned this error: {0}
-
-Check to see if the underlying media file been moved or deleted.</value>
+The library returned this error: {1}</value>
   </data>
   <data name="WindowLabelITunes" xml:space="preserve">
     <value>LyricsFetcher - iTunes Library</value>
@@ -176,5 +174,10 @@ Are you sure you want to discard all cached lyrics?</value>
   </data>
   <data name="splashscreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\splashscreen.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SongFailedToUpdateMsg" xml:space="preserve">
+    <value>The song "{0}" could not be updated. It is possible that the underlying media file ("{1}") is a format that Windows Media cannot update.
+
+The library returned this error: {2}</value>
   </data>
 </root>

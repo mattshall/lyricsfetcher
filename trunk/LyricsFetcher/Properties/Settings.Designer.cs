@@ -82,15 +82,12 @@ namespace LyricsFetcher.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool UseFastITunesLoader {
             get {
                 return ((bool)(this["UseFastITunesLoader"]));
-            }
-            set {
-                this["UseFastITunesLoader"] = value;
             }
         }
         
@@ -114,7 +111,8 @@ namespace LyricsFetcher.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://webservices.lyrdb.com/lookup.php?q={0}|{1}&for=match")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://webservices.lyrdb.com/lookup.php?q={0}|{1}&for=match&agent=LyricsFetcher-0" +
+            ".5")]
         public string LyrDbLookupUrl {
             get {
                 return ((string)(this["LyrDbLookupUrl"]));
@@ -127,6 +125,49 @@ namespace LyricsFetcher.Properties {
         public string LyrDbGetUrl {
             get {
                 return ((string)(this["LyrDbGetUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://webservices.lyrdb.com/lookup.php?q={0} {1}&for=fullt&agent=LyricsFetcher-0" +
+            ".5")]
+        public string LyrDbLookupTitleUrl {
+            get {
+                return ((string)(this["LyrDbLookupTitleUrl"]));
+            }
+        }
+        
+        /// <summary>
+        /// How are artist names arranged? &apos;FirstLast&apos; is normal &apos;John Smith&apos;; &apos;LastFirst&apos; means &apos;Smith, John&apos;
+        /// </summary>
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.SettingsDescriptionAttribute("How are artist names arranged? \'FirstLast\' is normal \'John Smith\'; \'LastFirst\' me" +
+            "ans \'Smith, John\'")]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("FirstLast")]
+        public string ArtistNameFormat {
+            get {
+                return ((string)(this["ArtistNameFormat"]));
+            }
+        }
+        
+        /// <summary>
+        /// The names of the lyrics source that will be used to look for lyrics in the order that they will be checked
+        /// </summary>
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.SettingsDescriptionAttribute("The names of the lyrics source that will be used to look for lyrics in the order " +
+            "that they will be checked")]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>LyricWiki</string>
+  <string>LyricsPlugin</string>
+  <string>LyrDb</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection LyricsSources {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["LyricsSources"]));
             }
         }
     }
