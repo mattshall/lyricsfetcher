@@ -25,6 +25,10 @@ namespace LyricsFetcher.Tests
         {
         }
 
+        public override string FullPath {
+            get { return String.Empty; }
+        }
+
         public override void Commit()
         {
         }
