@@ -5,6 +5,7 @@
  * Date: 2009-02-07 11:15 AM
  *
  * Change log:
+ * 2009-03-19  JPP  Added ability to LyrDb to lookup just by title.
  * 2009-03-03  JPP  Added LyricsFly
  * 2009-02-07  JPP  Initial version
  */
@@ -86,7 +87,8 @@ namespace LyricsFetcher {
     /// <summary>
     /// This source tries to fetch song lyrics from the Lyrdb site (www.lyrdb.com)
     /// </summary>
-    public class LyricsSourceLyrdb : ILyricsSource {
+    public class LyricsSourceLyrdb : ILyricsSource
+    {
 
         /// <summary>
         /// Gets the name of this source
@@ -102,28 +104,115 @@ namespace LyricsFetcher {
         /// </summary>
         /// <param name="s">The song whose lyrics are to be fetched</param>
         /// <returns>The lyrics or an empty string if the lyrics could not be found</returns>
-    public string GetLyrics(Song s) {
-        // Lyrdb can't handle single or double quotes in the title (as of 12/1/2008)
-        // So we just remove them
-        string title = s.Title.Replace("'", "");
-        title = title.Replace("\"", "");
+        public string GetLyrics(Song s) {
+            // Lyrdb can't handle single or double quotes in the title (as of 12/1/2008)
+            // So we just remove them
+            string title = s.Title.Replace("'", "");
+            title = title.Replace("\"", "");
 
-        string queryUrl = String.Format(Properties.Settings.Default.LyrDbLookupUrl, s.Artist, title);
+            WebClient client = new WebClient();
+            string result = String.Empty;
 
-        WebClient client = new WebClient();
-        string result = client.DownloadString(queryUrl);
-        if (result == String.Empty)
+            // If we have both the title and the artist, we can look for a perfect match
+            if (!String.IsNullOrEmpty(s.Artist)) {
+                string queryUrl = String.Format(Properties.Settings.Default.LyrDbLookupUrl, s.Artist, title);
+                result = client.DownloadString(queryUrl);
+            }
+
+            // If we only have the title or the perfect match failed, do a full text search using 
+            // whatever information we have
+            if (result == String.Empty) {
+                string queryUrl = String.Format(Properties.Settings.Default.LyrDbLookupTitleUrl, title, s.Artist);
+                result = client.DownloadString(queryUrl);
+            }
+
+            // Still didn't work? Give up.
+            if (result == String.Empty)
+                return String.Empty;
+
+            foreach (string x in result.Split('\n')) {
+                string id = x.Split('\\')[0];
+                string lyrics = client.DownloadString(Properties.Settings.Default.LyrDbGetUrl + id);
+                if (lyrics != String.Empty)
+                    return lyrics;
+            }
+
             return String.Empty;
+        }
+    }
 
-        foreach (string x in result.Split('\n')) {
-            string id = x.Split('\\')[0];
-            Uri lyricsUrl = new Uri(Properties.Settings.Default.LyrDbGetUrl + id);
-            string lyrics = client.DownloadString(lyricsUrl);
-            if (lyrics != String.Empty)
-                return lyrics;
+    /// <summary>
+    /// This source tries to fetch song lyrics from the ...
+    /// </summary>
+    public class LyricsSourceLyricsWikiHtml : ILyricsSource
+    {
+
+        /// <summary>
+        /// Gets the name of this source
+        /// </summary>
+        public string Name {
+            get {
+                return "LyricsWikiHtml";
+            }
         }
 
-        return String.Empty;
+        /// <summary>
+        /// Fetch the lyrics for the given song
+        /// </summary>
+        /// <param name="s">The song whose lyrics are to be fetched</param>
+        /// <returns>The lyrics or an empty string if the lyrics could not be found</returns>
+        public string GetLyrics(Song s) {
+
+            WebClient client = new WebClient();
+
+            string queryUrl = "http://lyricwiki.org/api.php?artist=" + s.Artist + "&song=" + s.Title + "&fmt=text";
+
+            string result = client.DownloadString(queryUrl);
+
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// This source tries to fetch song lyrics from the LyricsPlugin site (www.lyricsplugin.com)
+    /// </summary>
+    public class LyricsSourceLyricsPlugin : ILyricsSource
+    {
+
+        /// <summary>
+        /// Gets the name of this source
+        /// </summary>
+        public string Name {
+            get {
+                return "LyricsPlugin";
+            }
+        }
+
+        /// <summary>
+        /// Fetch the lyrics for the given song
+        /// </summary>
+        /// <param name="s">The song whose lyrics are to be fetched</param>
+        /// <returns>The lyrics or an empty string if the lyrics could not be found</returns>
+        public string GetLyrics(Song s) {
+
+            WebClient client = new WebClient();
+
+            string queryUrl = "http://www.lyricsplugin.com/plugin/?title=" + s.Title + "&artist=" + s.Artist;
+
+            string result = client.DownloadString(queryUrl);
+
+            const string lyricsMarker = @"<div id=""lyrics"">";
+            int index = result.IndexOf(lyricsMarker);
+            if (index >= 0) {
+                result = result.Substring(index + lyricsMarker.Length);
+                index = result.IndexOf("</div>");
+                if (index > 0) {
+                    result = result.Substring(0, index).Replace("<br />", "");
+                    return result.Trim();
+                }
+            }
+
+            return String.Empty;
         }
     }
 
@@ -193,7 +282,7 @@ Tag description
                 if (nav.MoveToChild("start", "")) {
                     if (nav.MoveToChild("sg", "")) {
                         if (nav.MoveToChild("tx", ""))
-                            return nav.Value.Replace("[br]", System.Environment.NewLine);
+                            return nav.Value.Replace("[br]", System.Environment.NewLine).Trim();
                     }
                 }
             } catch (XmlException) {
