@@ -5,6 +5,7 @@
  * Date: 2009-03-14 8:28 AM
  *
  * CHANGE LOG:
+ * 2009-03-19 JPP  Added FullPath property
  * 2009-03-14 JPP  Separated from iTunesLibrary.cs
  */
 
@@ -60,6 +61,19 @@ namespace LyricsFetcher
                     return ITunes.Instance.GetObjectByIds(this.sourceId,
                         this.playlistId, this.trackId, this.databaseId) as IITTrack;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Return the full path to the underlying media file
+        /// </summary>
+        public override string FullPath {
+            get {
+                IITFileOrCDTrack fileTrack = this.Track as IITFileOrCDTrack;
+                if (fileTrack == null)
+                    return string.Empty;
+                else
+                    return fileTrack.Location;
             }
         }
 

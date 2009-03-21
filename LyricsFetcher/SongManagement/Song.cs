@@ -5,6 +5,7 @@
  * Date: 8/01/2008 4:28 PM
  *
  * CHANGE LOG:
+ * 2009-03-19 JPP  Added FullPath property
  * 2009-02-15 JPP  Removed Kind as a visible property
  * 2008-01-07 JPP  Initial Version
  */
@@ -29,21 +30,21 @@ namespace LyricsFetcher
     /// <summary>
     /// A Song represents a single track within a media library.
     /// </summary>
-abstract public class Song
-{
-    #region Constructors
-
-    public Song()
+    abstract public class Song
     {
-    }
+        #region Constructors
 
-    public Song(string title, string artist, string album, string genre)
-    {
-        this.Title = title;
-        this.Artist = artist;
-        this.Album = album;
-        this.Genre = genre;
-    }
+        public Song()
+        {
+        }
+
+        public Song(string title, string artist, string album, string genre)
+        {
+            this.Title = title;
+            this.Artist = artist;
+            this.Album = album;
+            this.Genre = genre;
+        }
 
         #endregion
 
@@ -54,6 +55,11 @@ abstract public class Song
         public string Genre { get; set; }
         public string Lyrics { get; set; }
         public string Title { get; set; }
+
+        /// <summary>
+        /// Return the full path to the underlying media file
+        /// </summary>
+        abstract public string FullPath { get; }
 
         /// <summary>
         /// Return an enum indicating whether the lyrics of this song have been fetched
