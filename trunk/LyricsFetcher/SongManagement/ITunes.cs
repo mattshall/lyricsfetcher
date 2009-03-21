@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using iTunesLib;
 using ITDETECTORLib;
+using Microsoft.Win32;
 
 namespace LyricsFetcher
 {
@@ -49,7 +50,10 @@ namespace LyricsFetcher
                     return detector.IsiTunesAvailable;
                 }
                 catch (COMException) {
-                    return false;
+                    // Resort to low tech solution
+                    string regKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Apple Computer, Inc.\iTunes";
+                    string value = Registry.GetValue(regKey, "ProgramFolder", "") as string;
+                    return !String.IsNullOrEmpty(value);
                 }
             }
         }
