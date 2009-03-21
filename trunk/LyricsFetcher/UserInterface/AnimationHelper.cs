@@ -205,8 +205,8 @@ namespace LyricsFetcher
             // Handle death/destruction/hiding
             if (this.Column == null ||
                 this.ListView == null ||
-                !this.Column.IsVisible ||
                 this.ListView.IsDisposed ||
+                !this.Column.IsVisible ||
                 this.ListView.View != System.Windows.Forms.View.Details)
                 return;
 
