@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace LyricsFetcher
@@ -303,8 +304,15 @@ namespace LyricsFetcher
             bool isFetchingDone = e.Status == FetchStatus.Done && this.GetStatus(e.Song) == FetchStatus.Fetching;
             if (isFetchingDone) {
                 this.songStatusMap[e.Song].Status = FetchStatus.Done;
-                if (this.AutoUpdateLyrics)
-                    this.UpdateLyrics(e.Song, e.Lyrics, e.LyricsSource);
+                if (this.AutoUpdateLyrics) {
+                    try {
+                        this.UpdateLyrics(e.Song, e.Lyrics, e.LyricsSource);
+                    }
+                    catch (COMException) {
+                        // Something went wrong
+                        //TODO: Figure out a way to report this to the user
+                    }
+                }
             }
 
             // Trigger an event while the lyrics fetch has finished but not yet gone
