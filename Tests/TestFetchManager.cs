@@ -60,17 +60,17 @@ namespace LyricsFetcher.Tests
         public void TestGetStatus() {
             LyricsFetchManager lfm = new LyricsFetchManager();
 
-            Assert.AreEqual(FetchStatus.NotFound, lfm.GetStatus(s1));
-            Assert.AreEqual(FetchStatus.NotFound, lfm.GetStatus(s2));
+            Assert.AreEqual(LyricsFetchStatus.NotFound, lfm.GetStatus(s1));
+            Assert.AreEqual(LyricsFetchStatus.NotFound, lfm.GetStatus(s2));
 
             lfm.Queue(s1);
             lfm.Queue(s2);
-            Assert.AreEqual(FetchStatus.Waiting, lfm.GetStatus(s1));
-            Assert.AreEqual(FetchStatus.Waiting, lfm.GetStatus(s2));
+            Assert.AreEqual(LyricsFetchStatus.Waiting, lfm.GetStatus(s1));
+            Assert.AreEqual(LyricsFetchStatus.Waiting, lfm.GetStatus(s2));
 
             lfm.CancelAll();
-            Assert.AreEqual(FetchStatus.NotFound, lfm.GetStatus(s1));
-            Assert.AreEqual(FetchStatus.NotFound, lfm.GetStatus(s2));
+            Assert.AreEqual(LyricsFetchStatus.NotFound, lfm.GetStatus(s1));
+            Assert.AreEqual(LyricsFetchStatus.NotFound, lfm.GetStatus(s2));
         }
 
         [Test]
@@ -79,23 +79,23 @@ namespace LyricsFetcher.Tests
             lfm.RegisterSource(new AlwaysFailLyricsSource());
             lfm.RegisterSource(new AlwaysSuccessLyricsSource());
 
-            Assert.AreEqual(FetchStatus.NotFound, lfm.GetStatus(s1));
-            Assert.AreEqual(FetchStatus.NotFound, lfm.GetStatus(s2));
-            Assert.AreEqual(FetchStatus.NotFound, lfm.GetStatus(s3));
+            Assert.AreEqual(LyricsFetchStatus.NotFound, lfm.GetStatus(s1));
+            Assert.AreEqual(LyricsFetchStatus.NotFound, lfm.GetStatus(s2));
+            Assert.AreEqual(LyricsFetchStatus.NotFound, lfm.GetStatus(s3));
 
             lfm.Queue(s1);
             lfm.Queue(s2);
             lfm.Queue(s3);
-            Assert.AreEqual(FetchStatus.Waiting, lfm.GetStatus(s1));
-            Assert.AreEqual(FetchStatus.Waiting, lfm.GetStatus(s2));
-            Assert.AreEqual(FetchStatus.Waiting, lfm.GetStatus(s3));
+            Assert.AreEqual(LyricsFetchStatus.Waiting, lfm.GetStatus(s1));
+            Assert.AreEqual(LyricsFetchStatus.Waiting, lfm.GetStatus(s2));
+            Assert.AreEqual(LyricsFetchStatus.Waiting, lfm.GetStatus(s3));
 
             lfm.Start();
             lfm.WaitUntilFinished();
 
-            Assert.AreEqual(FetchStatus.NotFound, lfm.GetStatus(s1));
-            Assert.AreEqual(FetchStatus.NotFound, lfm.GetStatus(s2));
-            Assert.AreEqual(FetchStatus.NotFound, lfm.GetStatus(s3));
+            Assert.AreEqual(LyricsFetchStatus.NotFound, lfm.GetStatus(s1));
+            Assert.AreEqual(LyricsFetchStatus.NotFound, lfm.GetStatus(s2));
+            Assert.AreEqual(LyricsFetchStatus.NotFound, lfm.GetStatus(s3));
         }
 
         [Test]
@@ -104,9 +104,9 @@ namespace LyricsFetcher.Tests
             this.lfm.RegisterSource(new AlwaysFailLyricsSource());
             this.lfm.RegisterSource(new AlwaysSuccessLyricsSource());
 
-            this.lfm.StatusEvent += new EventHandler<FetchStatusEventArgs>(this.HandleStatusEvent);
+            this.lfm.StatusEvent += new EventHandler<LyricsFetchStatusEventArgs>(this.HandleStatusEvent);
             this.statusEventCount = 0;
-            this.lastStatus = FetchStatus.Undefined;
+            this.lastStatus = LyricsFetchStatus.Undefined;
 
             this.lfm.Queue(s1);
             this.lfm.Queue(s2);
@@ -115,18 +115,18 @@ namespace LyricsFetcher.Tests
 
             // Each song should trigger: Waiting, (Fetching, SourceDone) x 2, Done
             Assert.AreEqual(12, this.statusEventCount); 
-            Assert.AreEqual(FetchStatus.Done, this.lastStatus);
+            Assert.AreEqual(LyricsFetchStatus.Done, this.lastStatus);
         }
         LyricsFetchManager lfm;
         int statusEventCount;
-        FetchStatus lastStatus;
+        LyricsFetchStatus lastStatus;
 
-        void HandleStatusEvent(object sender, FetchStatusEventArgs args) {
+        void HandleStatusEvent(object sender, LyricsFetchStatusEventArgs args) {
             this.statusEventCount += 1;
 
             // SourceDone events count as Fetching status
-            if (args.Status == FetchStatus.SourceDone)
-                Assert.AreEqual(FetchStatus.Fetching, this.lfm.GetStatus(args.Song));
+            if (args.Status == LyricsFetchStatus.SourceDone)
+                Assert.AreEqual(LyricsFetchStatus.Fetching, this.lfm.GetStatus(args.Song));
             else
                 Assert.AreEqual(args.Status, this.lfm.GetStatus(args.Song));
             this.lastStatus = args.Status;
@@ -137,7 +137,7 @@ namespace LyricsFetcher.Tests
             LyricsFetchManager lfm = new LyricsFetchManager();
             lfm.RegisterSource(new AlwaysFailLyricsSource());
             lfm.RegisterSource(new AlwaysSuccessLyricsSource());
-            lfm.StatusEvent += new EventHandler<FetchStatusEventArgs>(this.HandleDoneStatusEvent);
+            lfm.StatusEvent += new EventHandler<LyricsFetchStatusEventArgs>(this.HandleDoneStatusEvent);
             doneEventCount = 0;
 
             lfm.Start();
@@ -149,8 +149,8 @@ namespace LyricsFetcher.Tests
         }
         int doneEventCount;
 
-        void HandleDoneStatusEvent(object sender, FetchStatusEventArgs args) {
-            if (args.Status == FetchStatus.Done)
+        void HandleDoneStatusEvent(object sender, LyricsFetchStatusEventArgs args) {
+            if (args.Status == LyricsFetchStatus.Done)
                 doneEventCount += 1;
         }
 
@@ -159,7 +159,7 @@ namespace LyricsFetcher.Tests
             LyricsFetchManager lfm = new LyricsFetchManager();
             lfm.RegisterSource(new AlwaysFailLyricsSource());
             lfm.RegisterSource(new AlwaysSuccessLyricsSource());
-            lfm.StatusEvent += new EventHandler<FetchStatusEventArgs>(this.HandleCancelledStatusEvent);
+            lfm.StatusEvent += new EventHandler<LyricsFetchStatusEventArgs>(this.HandleCancelledStatusEvent);
 
             cancelledEventCount = 0;
 
@@ -171,17 +171,17 @@ namespace LyricsFetcher.Tests
         }
         int cancelledEventCount;
 
-        void HandleCancelledStatusEvent(object sender, FetchStatusEventArgs args) {
-            if (args.Status == FetchStatus.Cancelled)
+        void HandleCancelledStatusEvent(object sender, LyricsFetchStatusEventArgs args) {
+            if (args.Status == LyricsFetchStatus.Cancelled)
                 cancelledEventCount += 1;
         }
 
         [Test]
         public void TestRealLyricsFetch() {
             LyricsFetchManager lfm = new LyricsFetchManager();
-            lfm.StatusEvent += new EventHandler<FetchStatusEventArgs>(this.HandleDoneStatusEvent2);
+            lfm.StatusEvent += new EventHandler<LyricsFetchStatusEventArgs>(this.HandleDoneStatusEvent2);
             lfm.RegisterSource(new LyricsSourceLyrdb());
-            lfm.RegisterSource(new LyricsSourceLyricWiki());
+            lfm.RegisterSource(new LyricsSourceLyricsFly());
 
             List<Song> songs = this.GetSongs();
 
@@ -208,8 +208,8 @@ namespace LyricsFetcher.Tests
             return songs;
         }
 
-        void HandleDoneStatusEvent2(object sender, FetchStatusEventArgs args) {
-            if (args.Status == FetchStatus.Done) {
+        void HandleDoneStatusEvent2(object sender, LyricsFetchStatusEventArgs args) {
+            if (args.Status == LyricsFetchStatus.Done) {
                 if (args.Lyrics == "")
                     args.Song.Lyrics = "Failed";
                 else
@@ -222,7 +222,7 @@ namespace LyricsFetcher.Tests
             LyricsFetchManager lfm = new LyricsFetchManager();
             lfm.AutoUpdateLyrics = true;
             lfm.RegisterSource(new LyricsSourceLyrdb());
-            lfm.RegisterSource(new LyricsSourceLyricWiki());
+            lfm.RegisterSource(new LyricsSourceLyricsFly());
 
             List<Song> songs = this.GetSongs();
 

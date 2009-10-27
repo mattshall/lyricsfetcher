@@ -62,7 +62,7 @@ namespace LyricsFetcher.CommandLine
                     }
                 );
 
-            ILyricsSource source2 = new LyricsSourceLyricWiki();
+            ILyricsSource source2 = new LyricsSourceLyricsPlugin();
             ILyricsSource source1 = new LyricsSourceLyrdb();
             ILyricsSource source3 = new LyricsSourceLyricsFly();
 
@@ -112,7 +112,7 @@ namespace LyricsFetcher.CommandLine
 
         static void TestSources() {
             ITunesLibrary lib = new ITunesLibrary();
-            lib.MaxSongsToFetch = 300;
+            lib.MaxSongsToFetch = 150;
             lib.LoadSongs();
             lib.WaitLoad();
 
@@ -124,11 +124,13 @@ namespace LyricsFetcher.CommandLine
                             status == LyricsStatus.Success);
                     }
                 );
-            TestOneSource(songs, new LyricsSourceLyricsWikiHtml());
-            //TestOneSource(songs, new LyricsSourceLyricsPlugin());
-            TestOneSource(songs, new LyricsSourceLyricWiki());
-            //TestOneSource(songs, new LyricsSourceLyrdb());
-            //TestOneSource(songs, new LyricsSourceLyricsFly());
+            songs = songs.GetRange(0, 10);
+
+            //TestOneSource(songs, new LyricsSourceLyricWiki());
+            //TestOneSource(songs, new LyricsSourceLyricWikiHtml());
+            TestOneSource(songs, new LyricsSourceLyricsPlugin());
+            TestOneSource(songs, new LyricsSourceLyrdb());
+            TestOneSource(songs, new LyricsSourceLyricsFly());
         }
 
         private static void TestOneSource(List<Song> songs, ILyricsSource source) {
@@ -148,7 +150,7 @@ namespace LyricsFetcher.CommandLine
                 successes, failures, sw.Elapsed, sw.ElapsedMilliseconds / songs.Count);
         }
 
-        static void lfm_StatusEvent(object sender, FetchStatusEventArgs e)
+        static void lfm_StatusEvent(object sender, LyricsFetchStatusEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine(e.Status);
         }
@@ -187,23 +189,72 @@ namespace LyricsFetcher.CommandLine
 
         static void TestLyricsSource() {
             //ILyricsSource strategy = new LyricsSourceLyricWiki();
-            //ILyricsSource strategy = new LyricsSourceLyricsWikiHtml();
+            //ILyricsSource strategy = new LyricsSourceLyricWikiHtml();
             //ILyricsSource strategy = new LyricsSourceLyrdb();
-            ILyricsSource strategy = new LyricsSourceLyricsPlugin();
+            //ILyricsSource strategy = new LyricsSourceLyricsPlugin();
+            ILyricsSource strategy = new LyricsSourceLyricsFly();
 
             //TestSong song = new TestSong("Lips don't hie", "Shakira", "Music of the Sun", "");
             //TestSong song = new TestSong("Hips don't lie", "Shakira", "Music of the Sun", "");
             //TestSong song = new TestSong("Pon de replay", "Rihanna", "Music of the Sun", "");
-            TestSong song = new TestSong("I Love to Move in Here", "Moby", "Last Night", "");
+            //TestSong song = new TestSong("I Love to Move in Here", "Moby", "Last Night", "");
+            TestSong song = new TestSong("Year 3000", "Busted", "", "");
 
             Console.WriteLine(song);
             Console.WriteLine(strategy.GetLyrics(song));
         }
 
+        static void TestMetaDataLookup() {
+            string file = @"C:\Documents and Settings\Admin_2\My Documents\My Music\iTunes\iTunes Music\After the fire\Der Kommissar\01 Der Kommissar.mp3";
+            //string file = @"C:\Documents and Settings\Admin_2\My Documents\My Music\iTunes\iTunes Music\Alanis Morissette\So-Called Chaos\01 Eight Easy Steps.mp3";
+            //string file = @"C:\Documents and Settings\Admin_2\My Documents\My Music\iTunes\iTunes Music\Unknown Artist\Unknown Album\16 Pump UP the jam.mp3";
+            //string file = @"C:\Documents and Settings\Admin_2\My Documents\My Music\iTunes\iTunes Music\Ziqo\Unknown Album\01 Vamos Embora.mp3";
+            
+            MetaDataLookup req = new MetaDataLookup();
+            Console.WriteLine("looking up '{0}'...", file);
+            req.Lookup(file);
+            Console.WriteLine("puid={0}", req.MetaData.Puid);
+            Console.WriteLine("title={0}", req.MetaData.Title);
+            Console.WriteLine("artist={0}", req.MetaData.Artist);
+            Console.WriteLine("genre={0}", req.MetaData.Genre);
+        }
+
+        static void TestManyMetaDataLookup() {
+            ITunesLibrary lib = new ITunesLibrary();
+            lib.MaxSongsToFetch = 50;
+            lib.LoadSongs();
+            lib.WaitLoad();
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            try {
+                foreach (Song song in lib.Songs) {
+                    MetaDataLookup req = new MetaDataLookup();
+                    //MetaDataLookupOld req = new MetaDataLookupOld();
+                    req.Lookup(song);
+                    if (req.Status == MetaDataStatus.Success) {
+                        if (song.Title == req.MetaData.Title && song.Artist == req.MetaData.Artist)
+                            System.Diagnostics.Debug.WriteLine(String.Format("same: {0}", song));
+                        else
+                            System.Diagnostics.Debug.WriteLine(String.Format("different: {0}. title={1}, artist={2}", song, req.MetaData.Title, req.MetaData.Artist));
+                    } else {
+                        System.Diagnostics.Debug.WriteLine(String.Format("failed: {0}", song));
+                    }
+                }
+            }
+            finally {
+                sw.Stop();
+                System.Diagnostics.Debug.WriteLine(String.Format("Tried {0} song in {1} ({2} secs per song)", lib.Songs.Count, sw.Elapsed, (sw.ElapsedMilliseconds / lib.Songs.Count) / 1000));
+            }
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("start");
+
             TestSources();
+
+            //TestManyMetaDataLookup();
 
             //Console.WriteLine("start");
             //string value = GetFieldByName(@"C:\Documents and Settings\Admin_2\My Documents\My Music\iTunes\iTunes Music\After the fire\Der Kommissar\01 Der Kommissar.mp3", "WM/Lyrics");

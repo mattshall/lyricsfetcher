@@ -23,16 +23,6 @@ namespace LyricsFetcher.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://lyricwiki.org/server.php")]
-        public string LyricsFetcher_org_lyricwiki_LyricWiki {
-            get {
-                return ((string)(this["LyricsFetcher_org_lyricwiki_LyricWiki"]));
-            }
-        }
-        
         /// <summary>
         /// The list of genres for which song lyrics will never be fetched
         /// </summary>
@@ -91,53 +81,6 @@ namespace LyricsFetcher.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://lyricsfly.com/api/api.php?i={0}&a={1}&t={2}")]
-        public string LyricsFlyApiUrl {
-            get {
-                return ((string)(this["LyricsFlyApiUrl"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("14ce15080316b07e9-temporary.API.access")]
-        public string LyricsFlyUserId {
-            get {
-                return ((string)(this["LyricsFlyUserId"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://webservices.lyrdb.com/lookup.php?q={0}|{1}&for=match&agent=LyricsFetcher-0" +
-            ".5")]
-        public string LyrDbLookupUrl {
-            get {
-                return ((string)(this["LyrDbLookupUrl"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://webservices.lyrdb.com/getlyr.php?q=")]
-        public string LyrDbGetUrl {
-            get {
-                return ((string)(this["LyrDbGetUrl"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://webservices.lyrdb.com/lookup.php?q={0} {1}&for=fullt&agent=LyricsFetcher-0" +
-            ".5")]
-        public string LyrDbLookupTitleUrl {
-            get {
-                return ((string)(this["LyrDbLookupTitleUrl"]));
-            }
-        }
-        
         /// <summary>
         /// How are artist names arranged? &apos;FirstLast&apos; is normal &apos;John Smith&apos;; &apos;LastFirst&apos; means &apos;Smith, John&apos;
         /// </summary>
@@ -159,12 +102,9 @@ namespace LyricsFetcher.Properties {
         [global::System.Configuration.SettingsDescriptionAttribute("The names of the lyrics source that will be used to look for lyrics in the order " +
             "that they will be checked")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>LyricWiki</string>
-  <string>LyricsPlugin</string>
-  <string>LyrDb</string>
-</ArrayOfString>")]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>LyricsPlugin</string>\r\n  <string>LyrDb</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection LyricsSources {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["LyricsSources"]));

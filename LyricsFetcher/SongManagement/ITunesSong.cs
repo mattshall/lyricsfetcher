@@ -5,6 +5,7 @@
  * Date: 2009-03-14 8:28 AM
  *
  * CHANGE LOG:
+ * 2009-03-25 JPP  Only write lyrics to iTunes if they have changed
  * 2009-03-19 JPP  Added FullPath property
  * 2009-03-14 JPP  Separated from iTunesLibrary.cs
  */
@@ -102,25 +103,18 @@ namespace LyricsFetcher
             if (track == null)
                 return;
 
-            try {
-                if (this.Title != null && track.Name != this.Title)
-                    track.Name = this.Title;
-                if (this.Artist != null && track.Artist != this.Artist)
-                    track.Artist = this.Artist;
-                if (this.Album != null && track.Album != this.Album)
-                    track.Album = this.Album;
-                if (this.Genre != null && track.Genre != this.Genre)
-                    track.Genre = this.Genre;
+            if (this.Title != null && track.Name != this.Title)
+                track.Name = this.Title;
+            if (this.Artist != null && track.Artist != this.Artist)
+                track.Artist = this.Artist;
+            if (this.Album != null && track.Album != this.Album)
+                track.Album = this.Album;
+            if (this.Genre != null && track.Genre != this.Genre)
+                track.Genre = this.Genre;
 
-                IITFileOrCDTrack fileTrack = track as IITFileOrCDTrack;
-                if (fileTrack != null && this.Lyrics != null)
-                    fileTrack.Lyrics = this.Lyrics;
-            }
-            catch (COMException) {
-                // There are quite a few reasons why these might fail. If the track
-                // is locked, or the underlying file has been deleted/moved.
-                // There is nothing we can do if this fails.
-            }
+            IITFileOrCDTrack fileTrack = track as IITFileOrCDTrack;
+            if (fileTrack != null && this.Lyrics != null && fileTrack.Lyrics != this.Lyrics)
+                fileTrack.Lyrics = this.Lyrics;
         }
 
         // If we have read this song from the XML, these are used to temporarily identify the

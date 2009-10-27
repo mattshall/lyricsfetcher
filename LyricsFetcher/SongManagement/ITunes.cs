@@ -5,17 +5,16 @@
  * Date: 7/01/2008 8:40 PM
  *
  * CHANGE LOG:
+ * 2009-04-03 JPP  Added registry checks in case there is a problem with ITDetector ocx.
  * 2009-02-26 JPP  Changed to use iTunesDetectorClass to detect the presence of iTunes
  * 2009-02-01 JPP  Simplified
  * 2008-01-07 JPP  Initial Version
  */
 
 using System;
-using System.ComponentModel;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using iTunesLib;
 using ITDETECTORLib;
+using iTunesLib;
 using Microsoft.Win32;
 
 namespace LyricsFetcher
@@ -42,8 +41,7 @@ namespace LyricsFetcher
         /// Is iTunes actually installed on this machine?
         /// If this returns false, no other methods should be called.
         /// </summary>
-        public static bool HasITunes
-        {
+        public static bool HasITunes {
             get {
                 try {
                     iTunesDetectorClass detector = new iTunesDetectorClass();
@@ -53,6 +51,13 @@ namespace LyricsFetcher
                     // Resort to low tech solution
                     string regKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Apple Computer, Inc.\iTunes";
                     string value = Registry.GetValue(regKey, "ProgramFolder", "") as string;
+
+                    // If that didn't work, look for value under WOW64 translation node. This
+                    // should happen transparently, but at least one user has reported that it doesn't.
+                    if (String.IsNullOrEmpty(value)) {
+                        regKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Apple Computer, Inc.\iTunes";
+                        value = Registry.GetValue(regKey, "ProgramFolder", "") as string;
+                    }
                     return !String.IsNullOrEmpty(value);
                 }
             }
@@ -62,8 +67,7 @@ namespace LyricsFetcher
         /// You cannot create instances of ITunes. You access a singleton through
         /// "ITunes.Instance".
         /// </summary>
-        private ITunes()
-        {
+        private ITunes() {
         }
 
         #endregion
@@ -73,18 +77,18 @@ namespace LyricsFetcher
         /// <summary>
         /// Return the iTunes library
         /// </summary>
-        public iTunesApp Application
-        {
+        public iTunesApp Application {
             get {
                 // TODO: Put this in a critical section
                 if (this.iTunesApp == null) {
                     try {
-                        iTunesApp = new iTunesAppClass();
-                    } catch (Exception) {
+                        this.iTunesApp = new iTunesAppClass();
+                    }
+                    catch (Exception) {
                         // do nothing
                     }
                 }
-                return iTunesApp;
+                return this.iTunesApp;
             }
         }
         private iTunesAppClass iTunesApp;
@@ -93,8 +97,7 @@ namespace LyricsFetcher
         /// Returns a track collection of all the tracks available in the iTunes library
         /// </summary>
         /// <returns>IITTrackCollection</returns>
-        public IITTrackCollection AllTracks
-        {
+        public IITTrackCollection AllTracks {
             get {
                 return this.Application.LibraryPlaylist.Tracks;
             }
@@ -103,8 +106,7 @@ namespace LyricsFetcher
         /// <summary>
         /// Return true if any track is currently playing in iTunes
         /// </summary>
-        public bool IsAnyTrackPlaying
-        {
+        public bool IsAnyTrackPlaying {
             get {
                 return this.Application.PlayerState == ITPlayerState.ITPlayerStatePlaying;
             }
@@ -113,8 +115,7 @@ namespace LyricsFetcher
         /// <summary>
         /// What version of iTunes is installed?
         /// </summary>
-        public string Version
-        {
+        public string Version {
             get {
                 return this.Application.Version;
             }
@@ -123,8 +124,7 @@ namespace LyricsFetcher
         /// <summary>
         /// Return the full path to the xml file that holds the information about the iTunes library
         /// </summary>
-        public string XmlPath
-        {
+        public string XmlPath {
             get {
                 return this.Application.LibraryXMLPath;
             }
@@ -146,36 +146,44 @@ namespace LyricsFetcher
             return this.Application.GetITObjectByID(sourceId, playlistId, trackId, databaseId);
         }
 
+        /// <summary>
+        /// Return a track by its persistent ids
+        /// </summary>
+        /// <param name="high"></param>
+        /// <param name="low"></param>
+        /// <returns></returns>
         public IITTrack GetTrackByPersistentIds(int high, int low) {
             return this.Application.LibraryPlaylist.Tracks.get_ItemByPersistentID(high, low);
         }
 
-        public void GetPersistentIds(object x, out int high, out int low)
-        {
+        /// <summary>
+        /// Fetch the two parts of the persistent id of the given object
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="high"></param>
+        /// <param name="low"></param>
+        public void GetPersistentIds(object x, out int high, out int low) {
             this.Application.GetITObjectPersistentIDs(ref x, out high, out low);
         }
 
         /// <summary>
         /// Pause any currently playing track
         /// </summary>
-        public void Pause()
-        {
+        public void Pause() {
             this.Application.Pause();
         }
 
         /// <summary>
         /// Play the current song in the playlist
         /// </summary>
-        public void Play()
-        {
+        public void Play() {
             this.Application.Play();
         }
 
         /// <summary>
         /// Release our iTunes related resources
         /// </summary>
-        public void Release()
-        {
+        public void Release() {
             if (this.iTunesApp != null) {
                 //System.Runtime.InteropServices.Marshal.ReleaseComObject(this.iTunesApp);
                 this.iTunesApp = null;
@@ -185,8 +193,7 @@ namespace LyricsFetcher
         /// <summary>
         /// StopPlaying playing any song
         /// </summary>
-        public void Stop()
-        {
+        public void Stop() {
             this.Application.Stop();
         }
 
@@ -198,8 +205,7 @@ namespace LyricsFetcher
         /// Is the given track currently playing?
         /// </summary>
         /// <returns>boolean</returns>
-        public bool IsTrackPlaying(IITTrack track)
-        {
+        public bool IsTrackPlaying(IITTrack track) {
             if (track == null || !this.IsAnyTrackPlaying)
                 return false;
 

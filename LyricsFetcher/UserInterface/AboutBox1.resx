@@ -118,9 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="richTextBox1.Text" xml:space="preserve">
-    <value>LyricsFetcher is the easiest way to find lyrics for all your songs.
+    <value>User guide and complete source code are available at http://lyricsfetcher.sourceforge.net.
 
-User guide and complete source code are available at http://lyricsfetcher.sourceforget.net.
+This program uses the lyrics fetching capacities of LyricsFly (http://www.lyricsfly.com), Lyrdb (http://www.lyrdb.com), and LyricsPlugin (http://www.lyricsplugin.com). It also uses the audio fingerprinting capabilities of MusicDNS (http://www.musicdns.com).
 
 Graphics are part of the boomy icon set, created by Milosz Wlazlo (http://miloszwl.deviantart.com).
 

@@ -5,8 +5,9 @@
  * Date: 2009-02-10 10:28 PM
  *
  * CHANGE LOG:
- * 2009-02-15 JPP  Added ListViewState
- * 2009-02-10 JPP  Initial Version
+ * 2009-03-31  JPP  Added MetaDataListViewState
+ * 2009-02-15  JPP  Added ListViewState
+ * 2009-02-10  JPP  Initial Version
  */
 
 using System;
@@ -23,6 +24,38 @@ namespace LyricsFetcher
     public class UserPreferences
     {
         #region Preferences
+
+        /// <summary>
+        /// Is the main window maximized?
+        /// </summary>
+        public bool IsMainWindowMaximized
+        {
+            get
+            {
+                bool? isMaximized = this.preferences["IsMainWindowMaximized"] as bool?;
+                if (isMaximized.HasValue)
+                    return (bool)isMaximized;
+                else
+                    return false;
+            }
+            set { this.preferences["IsMainWindowMaximized"] = value; }
+        }
+
+        /// <summary>
+        /// Which library was selected by the user?
+        /// </summary>
+        public LibraryApplication LibraryApplication
+        {
+            get
+            {
+                LibraryApplication? app = this.preferences["LibraryApplication"] as LibraryApplication?;
+                if (app.HasValue)
+                    return (LibraryApplication)app;
+                else
+                    return LibraryApplication.Unknown;
+            }
+            set { this.preferences["LibraryApplication"] = value; }
+        }
 
         /// <summary>
         /// What is the state of the main listview?
@@ -72,35 +105,16 @@ namespace LyricsFetcher
         }
 
         /// <summary>
-        /// Is the main window maximized?
+        /// What is the state of the metadata listview?
         /// </summary>
-        public bool IsMainWindowMaximized
-        {
-            get
-            {
-                bool? isMaximized = this.preferences["IsMainWindowMaximized"] as bool?;
-                if (isMaximized.HasValue)
-                    return (bool)isMaximized;
+        public byte[] MetaDataListViewState {
+            get {
+                if (this.preferences.ContainsKey("MetaDataListViewState"))
+                    return (byte[])this.preferences["MetaDataListViewState"];
                 else
-                    return false;
+                    return null;
             }
-            set { this.preferences["IsMainWindowMaximized"] = value; }
-        }
-
-        /// <summary>
-        /// Which library was selected by the user?
-        /// </summary>
-        public LibraryApplication LibraryApplication
-        {
-            get
-            {
-                LibraryApplication? app = this.preferences["LibraryApplication"] as LibraryApplication?;
-                if (app.HasValue)
-                    return (LibraryApplication)app;
-                else
-                    return LibraryApplication.Unknown;
-            }
-            set { this.preferences["LibraryApplication"] = value; }
+            set { this.preferences["MetaDataListViewState"] = value; }
         }
 
         #endregion
@@ -113,14 +127,6 @@ namespace LyricsFetcher
         public void Load()
         {
             this.Load(this.GetUserPreferencesPath());
-        }
-
-        /// <summary>
-        /// Save the user preferences to its normal location
-        /// </summary>
-        public void Save()
-        {
-            this.Save(this.GetUserPreferencesPath());
         }
 
         /// <summary>
@@ -146,6 +152,14 @@ namespace LyricsFetcher
                     System.Diagnostics.Debug.WriteLine(ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Save the user preferences to its normal location
+        /// </summary>
+        public void Save()
+        {
+            this.Save(this.GetUserPreferencesPath());
         }
 
         /// <summary>

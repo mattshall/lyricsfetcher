@@ -61,6 +61,9 @@ namespace LyricsFetcher
 
         #region Public properties
 
+        /// <summary>
+        /// Get or set the cache that manages our local lyrics
+        /// </summary>
         public LyricsCache Cache {
             get {
                 if (this.cache == null) {
@@ -105,6 +108,21 @@ namespace LyricsFetcher
                     delegate(Song s) {
                         LyricsStatus status = s.LyricsStatus;
                         return (status == LyricsStatus.Untried || status == LyricsStatus.Failed);
+                    }
+                );
+            }
+        }
+
+        /// <summary>
+        /// The list of songs that are missing either the title or artist
+        /// </summary>
+        public List<Song> SongsMissingData {
+            get {
+                return this.Songs.FindAll(
+                    delegate(Song s) {
+                        return (String.IsNullOrEmpty(s.Title) || 
+                            String.IsNullOrEmpty(s.Artist) || 
+                            s.Title.StartsWith("Track "));
                     }
                 );
             }
@@ -167,7 +185,7 @@ namespace LyricsFetcher
         /// Is the given song currently playing
         /// </summary>
         /// <param name="song">The song to check</param>
-        /// <returns></returns>
+        /// <returns>Is the given song playing</returns>
         abstract public bool IsPlaying(Song song);
 
         /// <summary>
@@ -184,7 +202,7 @@ namespace LyricsFetcher
         /// <summary>
         /// Cache the lyrics of the given song
         /// </summary>
-        /// <param name="song"></param>
+        /// <param name="song">The song whose lyrics are to be cache</param>
         public void CacheLyrics(Song song) {
             this.Cache.PutLyrics(song);
         }
@@ -240,6 +258,11 @@ namespace LyricsFetcher
 
         #region Loader Event Handlers
 
+        /// <summary>
+        /// Our song loader has finished. Remember the songs it found
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loader_DoneEvent(object sender, ProgressEventArgs e) {
             // Stop listening for events before doing anything else
             this.loader.ProgessEvent -= new EventHandler<ProgressEventArgs>(loader_ProgessEvent);
@@ -254,6 +277,11 @@ namespace LyricsFetcher
             this.loader = null;
         }
 
+        /// <summary>
+        /// Our song loader is a little closer to finishing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loader_ProgessEvent(object sender, ProgressEventArgs e) {
             this.OnProgressEvent(e);
         }
@@ -262,9 +290,24 @@ namespace LyricsFetcher
 
         #region Events
 
+        /// <summary>
+        /// Tell the world that we have finished loading our songs
+        /// </summary>
         public event EventHandler<ProgressEventArgs> DoneEvent;
+
+        /// <summary>
+        /// Tell the world that a song has started playing
+        /// </summary>
         public event EventHandler<EventArgs> PlayEvent;
+
+        /// <summary>
+        /// Tell the world that loading has progressed
+        /// </summary>
         public event EventHandler<ProgressEventArgs> ProgessEvent;
+
+        /// <summary>
+        /// Tell the world that our underlying media application has quit
+        /// </summary>
         public event EventHandler<EventArgs> QuitEvent;
 
         protected virtual void OnDoneEvent(ProgressEventArgs args) {
@@ -291,7 +334,8 @@ namespace LyricsFetcher
     }
 
     /// <summary>
-    /// 
+    /// This abstract class handles the reading of songs from a library
+    /// and returning a collection of those songs.
     /// </summary>
     public class SongLoader : BackgroundWorkerWithProgress
     {
@@ -306,12 +350,18 @@ namespace LyricsFetcher
         /// <summary>
         /// The cache used to optimize the fetching of lyrics from the library
         /// </summary>
-        public LyricsCache LyricsCache;
+        public LyricsCache LyricsCache {
+            get;
+            set;
+        }
 
         /// <summary>
         /// What is the maximum number of songs this loader should read?
         /// </summary>
-        public int MaxSongsToFetch;
+        public int MaxSongsToFetch {
+            get;
+            set;
+        }
 
         /// <summary>
         /// The list of songs that the loader loaded

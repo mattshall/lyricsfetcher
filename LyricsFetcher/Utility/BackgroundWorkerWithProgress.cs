@@ -37,8 +37,7 @@ namespace LyricsFetcher
     /// </remarks>
     public class BackgroundWorkerWithProgress
     {
-        public BackgroundWorkerWithProgress()
-        {
+        public BackgroundWorkerWithProgress() {
         }
 
         #region Public properties
@@ -47,8 +46,7 @@ namespace LyricsFetcher
         /// Is the worker currently running?
         /// </summary>
         [Browsable(false)]
-        public bool IsRunning
-        {
+        public bool IsRunning {
             get { return this.bgw != null && this.bgw.IsBusy; }
         }
 
@@ -56,8 +54,7 @@ namespace LyricsFetcher
         /// Has this process been cancelled?
         /// </summary>
         [Browsable(false)]
-        public bool IsCancelled
-        {
+        public bool IsCancelled {
             get { return this.isCancelled; }
         }
         private bool isCancelled = false;
@@ -66,8 +63,7 @@ namespace LyricsFetcher
         /// What was the result from the process?
         /// </summary>
         [Browsable(false)]
-        public object Result
-        {
+        public object Result {
             get { return this.result; }
         }
         protected object result;
@@ -79,16 +75,14 @@ namespace LyricsFetcher
         /// <summary>
         /// If the command is currently executing, cancel it
         /// </summary>
-        public void Cancel()
-        {
+        public virtual void Cancel() {
             this.isCancelled = true;
         }
 
         /// <summary>
         /// Execute the command and wait for the result
         /// </summary>
-        public void Run()
-        {
+        public void Run() {
             this.RunAsync();
             this.Wait();
         }
@@ -96,8 +90,14 @@ namespace LyricsFetcher
         /// <summary>
         /// Execute the command and return immediately.
         /// </summary>
-        public void RunAsync()
-        {
+        public void RunAsync() {
+            this.RunAsync(null);
+        }
+
+        /// <summary>
+        /// Execute the command and return immediately.
+        /// </summary>
+        public void RunAsync(object argument) {
             this.isCancelled = false;
 
             this.bgw = new BackgroundWorker();
@@ -106,7 +106,7 @@ namespace LyricsFetcher
             this.bgw.DoWork += new DoWorkEventHandler(bgw_DoWork);
             this.bgw.ProgressChanged += new ProgressChangedEventHandler(bgw_ProgressChanged);
             this.bgw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgw_RunWorkerCompleted);
-            this.bgw.RunWorkerAsync();
+            this.bgw.RunWorkerAsync(argument);
         }
         protected BackgroundWorker bgw;
 
@@ -114,8 +114,7 @@ namespace LyricsFetcher
         /// <summary>
         /// Wait until the process has finished
         /// </summary>
-        public void Wait()
-        {
+        public void Wait() {
             while (this.IsRunning) {
                 System.Windows.Forms.Application.DoEvents();
                 System.Threading.Thread.Sleep(10);
@@ -131,16 +130,14 @@ namespace LyricsFetcher
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        protected virtual object DoWork(DoWorkEventArgs e)
-        {
+        protected virtual object DoWork(DoWorkEventArgs e) {
             return null;
         }
 
         /// <summary>
         /// Call this periodically witin DoWork() to decide if the method should continue
         /// </summary>
-        protected bool CanContinueRunning
-        {
+        protected bool CanContinueRunning {
             get {
                 return !this.IsCancelled && !this.bgw.CancellationPending;
             }
@@ -150,17 +147,16 @@ namespace LyricsFetcher
         /// Call this within DoWork() to report progress
         /// </summary>
         /// <param name="percentage"></param>
-        protected void ReportProgress(int percentage)
-        {
-            this.bgw.ReportProgress(percentage);
+        protected void ReportProgress(int percentage) {
+            if (this.bgw != null)
+                this.bgw.ReportProgress(percentage);
         }
 
         /// <summary>
         /// Call this within DoWork() to report progress
         /// </summary>
         /// <param name="percentage"></param>
-        protected void ReportProgress(int percentage, string msg)
-        {
+        protected void ReportProgress(int percentage, string msg) {
             this.bgw.ReportProgress(percentage, msg);
         }
 
@@ -171,14 +167,12 @@ namespace LyricsFetcher
         public event EventHandler<ProgressEventArgs> ProgessEvent;
         public event EventHandler<ProgressEventArgs> DoneEvent;
 
-        protected virtual void OnProgressEvent(ProgressEventArgs args)
-        {
+        protected virtual void OnProgressEvent(ProgressEventArgs args) {
             if (this.ProgessEvent != null)
                 this.ProgessEvent(this, args);
         }
 
-        protected virtual void OnDoneEvent(ProgressEventArgs args)
-        {
+        protected virtual void OnDoneEvent(ProgressEventArgs args) {
             if (this.DoneEvent != null)
                 this.DoneEvent(this, args);
         }
@@ -187,16 +181,14 @@ namespace LyricsFetcher
 
         #region BackgroundWorker event handling
 
-        void bgw_DoWork(object sender, DoWorkEventArgs e)
-        {
+        void bgw_DoWork(object sender, DoWorkEventArgs e) {
             this.ReportProgress(0, "Starting...");
 
             e.Result = this.DoWork(e);
             e.Cancel = (this.isCancelled || this.bgw.CancellationPending);
         }
 
-        void bgw_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
+        void bgw_ProgressChanged(object sender, ProgressChangedEventArgs e) {
             ProgressEventArgs args = new ProgressEventArgs();
             args.Percentage = e.ProgressPercentage;
             args.Message = e.UserState as String;
@@ -210,8 +202,7 @@ namespace LyricsFetcher
                 this.bgw.CancelAsync();
         }
 
-        void bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
+        void bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             if (e.Error != null) {
                 System.Diagnostics.Debug.WriteLine(e.Error.Message);
                 throw e.Error;

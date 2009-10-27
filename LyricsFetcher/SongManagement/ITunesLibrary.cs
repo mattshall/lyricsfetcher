@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Xml;
 using System.Xml.XPath;
 using iTunesLib;
 
@@ -33,7 +34,13 @@ namespace LyricsFetcher
                 return new ITunesSongLoader();
         }
 
-        public override bool IsPlaying(Song song) {
+        /// <summary>
+        /// Is the given song currently playing
+        /// </summary>
+        /// <param name="song">The song to check</param>
+        /// <returns>Is the given song playing</returns>
+        public override bool IsPlaying(Song song)
+        {
             ITunesSong itSong = song as ITunesSong;
             if (itSong != null && itSong.Track != null)
                 return ITunes.Instance.IsTrackPlaying(itSong.Track);
@@ -41,45 +48,62 @@ namespace LyricsFetcher
                 return false;
         }
 
-        public override void Play(Song song) {
+        /// <summary>
+        /// Start the given song playing
+        /// </summary>
+        /// <param name="song">The song to play</param>
+        public override void Play(Song song)
+        {
             ITunesSong itSong = song as ITunesSong;
             if (itSong != null && itSong.Track != null)
                 itSong.Track.Play();
         }
 
-        public override void StopPlaying() {
+        /// <summary>
+        /// Stop playing any song
+        /// </summary>
+        public override void StopPlaying()
+        {
             ITunes.Instance.Stop();
         }
 
         #region Event handlers
 
-        public override void InitializeEvents() {
-            ITunes.Instance.Application.OnPlayerPlayEvent += new _IiTunesEvents_OnPlayerPlayEventEventHandler(ITunes_OnPlayerPlayEvent);
-            ITunes.Instance.Application.OnPlayerPlayingTrackChangedEvent += new _IiTunesEvents_OnPlayerPlayingTrackChangedEventEventHandler(ITunes_OnPlayerPlayingTrackChangedEvent);
-            ITunes.Instance.Application.OnPlayerStopEvent += new _IiTunesEvents_OnPlayerStopEventEventHandler(ITunes_OnPlayerStopEvent);
-            ITunes.Instance.Application.OnQuittingEvent += new _IiTunesEvents_OnQuittingEventEventHandler(ITunes_OnQuittingEvent);
+        /// <summary>
+        /// Initialize all events required for this library
+        /// </summary>
+        public override void InitializeEvents()
+        {
+            ITunes.Instance.Application.OnPlayerPlayEvent += new _IiTunesEvents_OnPlayerPlayEventEventHandler(ITunesOnPlayerPlayEvent);
+            ITunes.Instance.Application.OnPlayerPlayingTrackChangedEvent += new _IiTunesEvents_OnPlayerPlayingTrackChangedEventEventHandler(ITunesOnPlayerPlayingTrackChangedEvent);
+            ITunes.Instance.Application.OnPlayerStopEvent += new _IiTunesEvents_OnPlayerStopEventEventHandler(ITunesOnPlayerStopEvent);
+            ITunes.Instance.Application.OnQuittingEvent += new _IiTunesEvents_OnQuittingEventEventHandler(ITunesOnQuittingEvent);
         }
 
-        public override void DeinitializeEvents() {
-            ITunes.Instance.Application.OnPlayerPlayEvent -= new _IiTunesEvents_OnPlayerPlayEventEventHandler(ITunes_OnPlayerPlayEvent);
-            ITunes.Instance.Application.OnPlayerPlayingTrackChangedEvent -= new _IiTunesEvents_OnPlayerPlayingTrackChangedEventEventHandler(ITunes_OnPlayerPlayingTrackChangedEvent);
-            ITunes.Instance.Application.OnPlayerStopEvent -= new _IiTunesEvents_OnPlayerStopEventEventHandler(ITunes_OnPlayerStopEvent);
-            ITunes.Instance.Application.OnQuittingEvent -= new _IiTunesEvents_OnQuittingEventEventHandler(ITunes_OnQuittingEvent);
+        /// <summary>
+        /// Stop listening for events on this library
+        /// </summary>
+        public override void DeinitializeEvents()
+        {
+            ITunes.Instance.Application.OnPlayerPlayEvent -= new _IiTunesEvents_OnPlayerPlayEventEventHandler(ITunesOnPlayerPlayEvent);
+            ITunes.Instance.Application.OnPlayerPlayingTrackChangedEvent -= new _IiTunesEvents_OnPlayerPlayingTrackChangedEventEventHandler(ITunesOnPlayerPlayingTrackChangedEvent);
+            ITunes.Instance.Application.OnPlayerStopEvent -= new _IiTunesEvents_OnPlayerStopEventEventHandler(ITunesOnPlayerStopEvent);
+            ITunes.Instance.Application.OnQuittingEvent -= new _IiTunesEvents_OnQuittingEventEventHandler(ITunesOnQuittingEvent);
         }
 
-        void ITunes_OnPlayerStopEvent(object iTrack) {
+        void ITunesOnPlayerStopEvent(object iTrack) {
             this.OnPlayEvent(new EventArgs());
         }
 
-        void ITunes_OnPlayerPlayingTrackChangedEvent(object iTrack) {
+        void ITunesOnPlayerPlayingTrackChangedEvent(object iTrack) {
             this.OnPlayEvent(new EventArgs());
         }
 
-        void ITunes_OnPlayerPlayEvent(object iTrack) {
+        void ITunesOnPlayerPlayEvent(object iTrack) {
             this.OnPlayEvent(new EventArgs());
         }
 
-        void ITunes_OnQuittingEvent() {
+        void ITunesOnQuittingEvent() {
             this.OnQuitEvent(new EventArgs());
             ITunes.Instance.Release();
         }
@@ -148,14 +172,17 @@ namespace LyricsFetcher
 
             // Load the whole xml file into memory, and then remove the DTD.
             // We remove that so we can read the xml even when not connected to the network
-            string xml = File.ReadAllText(ITunes.Instance.XmlPath);
-            int docTypeStart = xml.IndexOf("<!DOCTYPE");
-            const string endOfDtdMarker = "0.dtd\">";
-            int docTypeEnd = xml.IndexOf(endOfDtdMarker) + endOfDtdMarker.Length;
-            string xml2 = xml.Remove(docTypeStart, docTypeEnd - docTypeStart);
+            //string xml = File.ReadAllText(ITunes.Instance.XmlPath);
+            //int docTypeStart = xml.IndexOf("<!DOCTYPE");
+            //const string endOfDtdMarker = "0.dtd\">";
+            //int docTypeEnd = xml.IndexOf(endOfDtdMarker) + endOfDtdMarker.Length;
+            //string xml2 = xml.Remove(docTypeStart, docTypeEnd - docTypeStart);
 
-            XPathDocument doc = new XPathDocument(new StringReader(xml2));
-            XPathNavigator nav = doc.CreateNavigator();
+            //XPathDocument doc = new XPathDocument(new StringReader(xml2));
+            XmlDocument doc2 = new XmlDocument();
+            doc2.XmlResolver = null;
+            doc2.Load(ITunes.Instance.XmlPath);
+            XPathNavigator nav = doc2.CreateNavigator();
 
             // Move to plist, then to master library, than tracks, then first track
             nav.MoveToChild("plist", "");

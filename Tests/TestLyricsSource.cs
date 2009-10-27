@@ -21,17 +21,17 @@ namespace LyricsFetcher.Tests
     [TestFixture]
     public class TestLyricsSource
     {
-        [Test]
-        public void TestLyricWikiStrategy()
-        {
-            Dictionary<Song, string> songs = this.CreateWikiSongs();
+        //[Test]
+        //public void TestLyricWikiStrategy()
+        //{
+        //    Dictionary<Song, string> songs = this.CreateWikiSongs();
 
-            LyricsSourceLyricWiki strategy = new LyricsSourceLyricWiki();
+        //    LyricsSourceLyricWiki strategy = new LyricsSourceLyricWiki();
 
-            foreach (Song s in songs.Keys) {
-                AssertEqualIgnoringLineEndings(songs[s], strategy.GetLyrics(s));
-            }
-        }
+        //    foreach (Song s in songs.Keys) {
+        //        AssertEqualIgnoringLineEndings(songs[s], strategy.GetLyrics(s));
+        //    }
+        //}
 
         public void AssertEqualIgnoringLineEndings(string s1, string s2)
         {

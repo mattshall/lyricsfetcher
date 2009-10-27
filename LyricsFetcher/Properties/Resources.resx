@@ -175,8 +175,19 @@ Are you sure you want to discard all cached lyrics?</value>
   <data name="splashscreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\splashscreen.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SongFailedToUpdateMsg" xml:space="preserve">
-    <value>The song "{0}" could not be updated. It is possible that the underlying media file ("{1}") is a format that Windows Media cannot update.
+  <data name="SongFailedToUpdateMsgWmp" xml:space="preserve">
+    <value>The song "{0}" could not be updated. It is possible that the underlying media file ("{1}") is read-only, missing or in a format that Windows Media cannot update.
+
+The library returned this error: {2}</value>
+  </data>
+  <data name="LookupAllMsg" xml:space="preserve">
+    <value>Do you want to look up all {0} songs that are shown in the list?</value>
+  </data>
+  <data name="AcceptAllMsg" xml:space="preserve">
+    <value>Do you want to accept all successful lookups?</value>
+  </data>
+  <data name="SongFailedToUpdateMsgITunes" xml:space="preserve">
+    <value>The song "{0}" could not be updated. It is possible that the underlying media file ("{1}") is read-only, missing or corrupt.
 
 The library returned this error: {2}</value>
   </data>
