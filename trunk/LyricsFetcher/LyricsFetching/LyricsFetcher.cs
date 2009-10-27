@@ -16,7 +16,7 @@ namespace LyricsFetcher
     /// <summary>
     /// What is the status of the fetch operation?
     /// </summary>
-    public enum FetchStatus
+    public enum LyricsFetchStatus
     {
         Undefined = 0,
         NotFound,
@@ -30,12 +30,12 @@ namespace LyricsFetcher
     /// <summary>
     /// The information available in a FetchStatusEvent
     /// </summary>
-    public class FetchStatusEventArgs : EventArgs
+    public class LyricsFetchStatusEventArgs : EventArgs
     {
         /// <summary>
         /// What is the fetch status of this song?
         /// </summary>
-        public FetchStatus Status = FetchStatus.Undefined;
+        public LyricsFetchStatus Status = LyricsFetchStatus.Undefined;
         
         /// <summary>
         /// What song is the event for?
@@ -126,14 +126,14 @@ namespace LyricsFetcher
 
         private void StartSource(ILyricsSource source)
         {
-            this.args.Status = FetchStatus.Fetching;
+            this.args.Status = LyricsFetchStatus.Fetching;
             this.args.LyricsSource = source;
             this.OnStatusEvent(args);
         }
 
         private void FinishSource(ILyricsSource source, string lyrics, int elapsedTime)
         {
-            this.args.Status = FetchStatus.SourceDone;
+            this.args.Status = LyricsFetchStatus.SourceDone;
             this.args.LyricsSource = source;
             this.args.Lyrics = lyrics;
             this.args.ElapsedTime = elapsedTime;
@@ -142,7 +142,7 @@ namespace LyricsFetcher
 
         private void FinishFetch(string lyrics)
         {
-            this.args.Status = FetchStatus.Done;
+            this.args.Status = LyricsFetchStatus.Done;
             this.args.Lyrics = lyrics;
             this.OnStatusEvent(args);
         }
@@ -152,9 +152,9 @@ namespace LyricsFetcher
         /// <summary>
         /// Signal that the fetch status may have changed
         /// </summary>
-        public event EventHandler<FetchStatusEventArgs> StatusEvent;
+        public event EventHandler<LyricsFetchStatusEventArgs> StatusEvent;
 
-        protected virtual void OnStatusEvent(FetchStatusEventArgs args)
+        protected virtual void OnStatusEvent(LyricsFetchStatusEventArgs args)
         {
             if (this.StatusEvent != null)
                 this.StatusEvent(this, args);
@@ -164,7 +164,7 @@ namespace LyricsFetcher
 
         #region Private variables
 
-        private FetchStatusEventArgs args = new FetchStatusEventArgs();
+        private LyricsFetchStatusEventArgs args = new LyricsFetchStatusEventArgs();
 
         #endregion
     }

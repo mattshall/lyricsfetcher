@@ -27,6 +27,9 @@ namespace LyricsFetcher
             return new WmpSongLoader();
         }
 
+        /// <summary>
+        /// Close this library
+        /// </summary>
         public override void Close() {
             // WMP is embedded in our program, so if we close the library, we 
             // have to stop playing any current songs, otherwise the user has no
@@ -35,7 +38,13 @@ namespace LyricsFetcher
             base.Close();
         }
 
-        public override bool IsPlaying(Song song) {
+        /// <summary>
+        /// Is the given song currently playing
+        /// </summary>
+        /// <param name="song">The song to check</param>
+        /// <returns>Is the given song playing</returns>
+        public override bool IsPlaying(Song song)
+        {
             WmpSong wmpSong = song as WmpSong;
             if (wmpSong == null)
                 return false;
@@ -46,7 +55,12 @@ namespace LyricsFetcher
             return Wmp.Instance.Player.currentMedia.get_isIdentical(wmpSong.Media);
         }
 
-        public override void Play(Song song) {
+        /// <summary>
+        /// Start the given song playing
+        /// </summary>
+        /// <param name="song">The song to play</param>
+        public override void Play(Song song)
+        {
             WmpSong wmpSong = song as WmpSong;
             if (wmpSong != null) {
                 Wmp.Instance.Player.currentPlaylist.appendItem(wmpSong.Media);
@@ -54,21 +68,33 @@ namespace LyricsFetcher
             }
         }
 
-        public override void StopPlaying() {
+        /// <summary>
+        /// Stop playing any song
+        /// </summary>
+        public override void StopPlaying()
+        {
             Wmp.Instance.Player.controls.stop();
         }
 
         #region Event handlers
 
-        public override void InitializeEvents() {
-            Wmp.Instance.Player.PlayStateChange += new _WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
+        /// <summary>
+        /// Initialize all events required for this library
+        /// </summary>
+        public override void InitializeEvents()
+        {
+            Wmp.Instance.Player.PlayStateChange += new _WMPOCXEvents_PlayStateChangeEventHandler(PlayerPlayStateChange);
         }
 
-        public override void DeinitializeEvents() {
-            Wmp.Instance.Player.PlayStateChange -= new _WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
+        /// <summary>
+        /// Stop listening for events on this library
+        /// </summary>
+        public override void DeinitializeEvents()
+        {
+            Wmp.Instance.Player.PlayStateChange -= new _WMPOCXEvents_PlayStateChangeEventHandler(PlayerPlayStateChange);
         }
 
-        void Player_PlayStateChange(int NewState) {
+        void PlayerPlayStateChange(int NewState) {
             this.OnPlayEvent(new EventArgs());
         }
 

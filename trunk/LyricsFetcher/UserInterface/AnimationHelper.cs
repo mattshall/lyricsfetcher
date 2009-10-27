@@ -5,12 +5,15 @@
  * Date: 2009-02-14 8:28 AM
  *
  * CHANGE LOG:
+ * 2009-04-05 JPP  - More trying to prevent disposal errors
+ * 2009-03-31 JPP  - Prevent the animator from running on a disposed OLV
  * 2009-02-14 JPP  - Initial version
  */
 
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 using BrightIdeasSoftware;
 
@@ -33,6 +36,36 @@ namespace LyricsFetcher
     /// </remarks>
     public class AnimationHelper
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Which column is going to have an animated image?
+        /// </summary>
+        public OLVColumn Column {
+            get { return this.column; }
+            set {
+                if (this.column != null) {
+                    this.column.ImageGetter = null;
+                    this.ListView.Disposed -= new EventHandler(ListViewDisposed);
+                }
+
+                this.column = value;
+
+                if (this.column != null) {
+                    this.column.ImageGetter = delegate(object model) {
+                        if (this.IsAnimating(model)) {
+                            return this.ImageNames[this.GetAnimationIndex(model)];
+                        } else {
+                            return this.ImageNames[0];
+                        }
+                    };
+                    this.ListView.Disposed += new EventHandler(ListViewDisposed);
+                }
+            }
+        }
+
+        private OLVColumn column;
+
         /// <summary>
         /// The list of names of the images to be used as the animation.
         /// These names must exist int the SmallImageList of the ObjectListView
@@ -46,23 +79,6 @@ namespace LyricsFetcher
         }
         private List<string> imageNames = new List<string>();
 
-        /// <summary>
-        /// Which column is going to have an animated image?
-        /// </summary>
-        public OLVColumn Column {
-            get { return this.column; }
-            set {
-                this.column = value;
-                this.column.ImageGetter = delegate(object model) {
-                    if (this.IsAnimating(model)) {
-                        return this.ImageNames[this.GetAnimationIndex(model)];
-                    } else {
-                        return this.ImageNames[0];
-                    }
-                };
-            }
-        }
-        private OLVColumn column;
 
         /// <summary>
         /// This delegate is called when the helper need to know if a given
@@ -99,6 +115,10 @@ namespace LyricsFetcher
             }
         }
         private int millisecondsBetweenAnimations = 75;
+
+        #endregion
+
+        #region Commands
 
         /// <summary>
         /// This takes the given image, which is a composite of all animation
@@ -142,6 +162,34 @@ namespace LyricsFetcher
             }
         }
 
+        /// <summary>
+        /// Start the animations rolling
+        /// </summary>
+        public void Start() {
+            // Create a timer that will fire every MillisecondsBetweenAnimations.
+            // By setting SynchronizingObject, the timer will invoke the elapsed event
+            // on the UI thread.
+            if (this.tickler == null) {
+                this.tickler = new System.Timers.Timer(this.MillisecondsBetweenAnimations);
+                //this.tickler.SynchronizingObject = this.ListView;
+                this.tickler.Elapsed += new System.Timers.ElapsedEventHandler(tickler_Elapsed);
+            }
+
+            this.tickler.Start();
+        }
+        private System.Timers.Timer tickler;
+
+        /// <summary>
+        /// Stop the animations
+        /// </summary>
+        public void Stop() {
+            if (this.tickler != null) {
+                this.tickler.Stop();
+            }
+        }
+
+        #endregion
+
         #region Implementation
 
         /// <summary>
@@ -175,33 +223,22 @@ namespace LyricsFetcher
 
         #region Tickler implementation
 
-        /// <summary>
-        /// Start the animations rolling
-        /// </summary>
-        public void Start() {
-            // Create a timer that will fire every MillisecondsBetweenAnimations.
-            // By setting SynchronizingObject, the timer will invoke the elapsed event
-            // on the UI thread.
-            if (this.tickler == null) {
-                this.tickler = new System.Timers.Timer(this.MillisecondsBetweenAnimations);
-                this.tickler.SynchronizingObject = this.ListView;
-                this.tickler.Elapsed += new System.Timers.ElapsedEventHandler(tickler_Elapsed);
-            }
-
-            this.tickler.Start();
-        }
-        private System.Timers.Timer tickler;
-
-        /// <summary>
-        /// Stop the animations
-        /// </summary>
-        public void Stop() {
-            if (this.tickler != null) {
-                this.tickler.Stop();
-            }
-        }
-
         void tickler_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
+            if (this.ListView == null && this.ListView.IsDisposed)
+                return;
+
+            if (this.ListView.InvokeRequired) {
+                try {
+                    this.ListView.Invoke(new MethodInvoker(this.tickler_ElapsedInThread));
+                }
+                catch (ObjectDisposedException) {
+                    this.Stop();
+                }
+            } else
+                this.tickler_ElapsedInThread();
+        }
+
+        void tickler_ElapsedInThread() {
             // Handle death/destruction/hiding
             if (this.Column == null ||
                 this.ListView == null ||
@@ -258,6 +295,15 @@ namespace LyricsFetcher
             // Force the listview to redraw the animated images
             if (!updateRect.IsEmpty)
                 this.ListView.Invalidate(updateRect);
+        }
+
+        /// <summary>
+        /// When the owning ListView dies, stop tickling it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ListViewDisposed(object sender, EventArgs e) {
+            this.Stop();
         }
 
         #endregion

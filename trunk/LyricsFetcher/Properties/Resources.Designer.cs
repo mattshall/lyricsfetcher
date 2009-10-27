@@ -61,6 +61,15 @@ namespace LyricsFetcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to accept all successful lookups?.
+        /// </summary>
+        internal static string AcceptAllMsg {
+            get {
+                return ResourceManager.GetString("AcceptAllMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LyricsFetcher.
         /// </summary>
         internal static string AppName {
@@ -114,6 +123,15 @@ namespace LyricsFetcher.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to look up all {0} songs that are shown in the list?.
+        /// </summary>
+        internal static string LookupAllMsg {
+            get {
+                return ResourceManager.GetString("LookupAllMsg", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap network_offline {
             get {
                 object obj = ResourceManager.GetObject("network_offline", resourceCulture);
@@ -147,13 +165,24 @@ namespace LyricsFetcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The song &quot;{0}&quot; could not be updated. It is possible that the underlying media file (&quot;{1}&quot;) is a format that Windows Media cannot update.
+        ///   Looks up a localized string similar to The song &quot;{0}&quot; could not be updated. It is possible that the underlying media file (&quot;{1}&quot;) is read-only, missing or corrupt.
         ///
         ///The library returned this error: {2}.
         /// </summary>
-        internal static string SongFailedToUpdateMsg {
+        internal static string SongFailedToUpdateMsgITunes {
             get {
-                return ResourceManager.GetString("SongFailedToUpdateMsg", resourceCulture);
+                return ResourceManager.GetString("SongFailedToUpdateMsgITunes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The song &quot;{0}&quot; could not be updated. It is possible that the underlying media file (&quot;{1}&quot;) is read-only, missing or in a format that Windows Media cannot update.
+        ///
+        ///The library returned this error: {2}.
+        /// </summary>
+        internal static string SongFailedToUpdateMsgWmp {
+            get {
+                return ResourceManager.GetString("SongFailedToUpdateMsgWmp", resourceCulture);
             }
         }
         

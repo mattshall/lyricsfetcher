@@ -25,9 +25,9 @@ namespace LyricsFetcher.Tests
         {
             LyricsFetcher lf = new LyricsFetcher();
             lf.Sources.Add(new LyricsSourceLyrdb());
-            lf.Sources.Add(new LyricsSourceLyricWiki());
+            lf.Sources.Add(new LyricsSourceLyricsFly());
 
-            lf.StatusEvent += new EventHandler<FetchStatusEventArgs>(lf_StatusEvent);
+            lf.StatusEvent += new EventHandler<LyricsFetchStatusEventArgs>(lf_StatusEvent);
 
             List<Song> songs = this.GetSongs();
 
@@ -41,9 +41,9 @@ namespace LyricsFetcher.Tests
                 Assert.AreNotEqual("", s.Lyrics);
         }
 
-        void lf_StatusEvent(object sender, FetchStatusEventArgs e)
+        void lf_StatusEvent(object sender, LyricsFetchStatusEventArgs e)
         {
-            if (e.Status == FetchStatus.Done) {
+            if (e.Status == LyricsFetchStatus.Done) {
                 if (e.Lyrics == "")
                     e.Song.Lyrics = "Failed";
                 else

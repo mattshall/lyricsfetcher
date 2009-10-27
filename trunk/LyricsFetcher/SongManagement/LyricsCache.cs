@@ -17,6 +17,7 @@
  * Date: 2009-02-09 4:28 PM
  *
  * CHANGE LOG:
+ * 2009-03-30 JPP  - Added RemoveLyrics()
  * 2009-03-06 JPP  - Added Selector to cache
  * 2009-02-26 JPP  - Added HasLyrics().
  *                 - null and empty strings are now valid values for lyrics
@@ -101,6 +102,14 @@ namespace LyricsFetcher
         /// <param name="song">The Song whose lyrics are to be remembered</param>
         public void PutLyrics(Song song) {
             this.lyricsCache[this.GetKey(song)] = song.Lyrics;
+        }
+
+        /// <summary>
+        /// Remove the lyrics of the given song from the cache
+        /// </summary>
+        /// <param name="song">The Song whose lyrics are to be removed</param>
+        public void RemoveLyrics(Song song) {
+            this.lyricsCache.Remove(this.GetKey(song));
         }
 
         #endregion

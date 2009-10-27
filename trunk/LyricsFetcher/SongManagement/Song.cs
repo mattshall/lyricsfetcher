@@ -5,9 +5,11 @@
  * Date: 8/01/2008 4:28 PM
  *
  * CHANGE LOG:
- * 2009-03-19 JPP  Added FullPath property
- * 2009-02-15 JPP  Removed Kind as a visible property
- * 2008-01-07 JPP  Initial Version
+ * 2009-10-26  JPP  Lyrics that start with "<!DOCTYPE" are considered to be missing lyrics
+ *                  (this is the value that LyricWiki returns nowdays since the API has been nuked)
+ * 2009-03-19  JPP  Added FullPath property
+ * 2009-02-15  JPP  Removed Kind as a visible property
+ * 2008-01-07  JPP  Initial Version
  */
 
 using System;
@@ -67,7 +69,9 @@ namespace LyricsFetcher
         public LyricsStatus LyricsStatus {
             get {
                 if (!String.IsNullOrEmpty(this.Lyrics)) {
-                    if (this.Lyrics.StartsWith("Failed") || this.Lyrics.StartsWith("[[LyricsFetcher failed"))
+                    if (this.Lyrics.StartsWith("Failed") || 
+                        this.Lyrics.StartsWith("[[LyricsFetcher failed") ||
+                        this.Lyrics.StartsWith("<!DOCTYPE"))
                         return LyricsStatus.Failed;
                     else
                         return LyricsStatus.Success;

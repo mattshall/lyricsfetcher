@@ -41,6 +41,7 @@
       <HintPath>.\ObjectListView.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.Services" />
@@ -48,6 +49,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MetaDataFetching\MetaData.cs" />
+    <Compile Include="MetaDataFetching\MetaDataLookup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UserInterface\Form1.LyricsTab.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\Form1.MetaDataTab.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetaDataFetching\Decoder.cs" />
+    <Compile Include="MetaDataFetching\MetaDataFetchManager.cs" />
     <Compile Include="SongManagement\ITunesLibrary.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -76,6 +89,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\UserPreferences.cs" />
+    <Compile Include="Utility\AbstractFetchManager.cs" />
     <Compile Include="Utility\BackgroundWorkerWithProgress.cs">
     </Compile>
     <Compile Include="UserInterface\Form1.cs">
@@ -122,20 +136,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Web References\org.lyricwiki\LyricsResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\org.lyricwiki\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\org.lyricwiki\server.wsdl" />
-    <None Include="Web References\org.lyricwiki\SongResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\org.lyricwiki\SOTDResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -144,11 +144,6 @@
     <Compile Include="SongManagement\Song.cs" />
     <Compile Include="SongManagement\SongLibrary.cs" />
     <Compile Include="Utility\WaitCursor.cs" />
-    <Compile Include="Web References\org.lyricwiki\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="SongManagement\Wmp.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -181,19 +176,6 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://lyricwiki.org/server.php%3fwsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\org.lyricwiki\</RelPath>
-      <UpdateFromURL>http://lyricwiki.org/server.php%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>LyricsFetcher_org_lyricwiki_LyricWiki</CachedSettingsPropName>
-    </WebReferenceUrl>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\network-offline.png" />
   </ItemGroup>
   <ItemGroup>
@@ -219,7 +201,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\logo.png" />
+    <Content Include="AACTagReader.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="genpuid.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libexpat.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="LyricsFetcher.ico" />
+    <Content Include="mipcore.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\splashscreen.png" />
     <None Include="Resources\splashscreen3.png" />
     <None Include="Resources\splashscreen2.png" />
